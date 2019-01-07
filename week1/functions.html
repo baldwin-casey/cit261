@@ -1,1 +1,47 @@
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+</head>
+<body>
+<h1>Functions</h1>
+<p>Enter 2 numbers and operation to calculate them</p>
+<input type="number" id="firstnum">
+<input type="number" id="secondnum"><br>
+  <input type="radio" name="operation" value="add" checked> +<br>
+  <input type="radio" name="operation" value="subtract"> -<br>
+  <input type="radio" name="operation" value="multiply"> *<br>
+  <input type="radio" name="operation" value="divide"> /<br>
+<button onclick="addnum()">Calculate</button>
+<br>
+The operator is:<p id="test"</p>
+The result is:<p id="calculation"</p>
+<H2>Explanation</h2>
+<p>Both number inputs are variables. These 2 are converted to numbers, as the default input is a string. The result is a third variable. The operator is another variable. The javascript looks for which is selected and enters that value into the variable. Once the user presses calculate, it triggers the function to run, which runs a series of if statements that run the desired operation. After this, it displays the result.</p>
+<script>
+function addnum() {
+var firstnum = Number(document.getElementById("firstnum").value);;
+var secondnum = Number(document.getElementById("secondnum").value);;
+var symbol = document.querySelector('input[name = "operation"]:checked').value;
+if ( symbol === 'add' ) {
+var mathresult = firstnum + secondnum;
+}
+if ( symbol === 'subtract' ) {
+var mathresult = firstnum - secondnum;
+}
+if ( symbol === 'multiply' ) {
+var mathresult = firstnum * secondnum;
+}
+if ( symbol === 'divide' ) {
+var mathresult = firstnum / secondnum;
+}
 
+ document.getElementById("calculation").innerHTML = mathresult;
+ document.getElementById("test").innerHTML = symbol;
+}
+
+</script>
+<footer>
+<a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
+</footer>
+</body>
+</html?

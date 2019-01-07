@@ -1,1 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+</head>
+<body>
+<h1>Loops!</h1>
 
+How many times should this loop? (Max of 20, I don't own these servers)
+<br>
+<input type="number" id="timestoloop" value="5"> 
+<button onclick="loopfunction()">Do some for loops</button>
+<p id="loopingarea"></p>
+<p id="rebuketheuser"></p>
+
+Time for a while loop. This loop loops once per second, up to the specified amount. (Max of 20, I don't own these servers)
+<br>
+<input type="number" id="secondstoloop" value="5"> 
+<button onclick="timer()">Do some while loops</button>
+<p id="whileloopingarea"></p>
+<p id="rebuketheusermore"></p>
+<script>
+function loopfunction() {
+var input = Number(document.getElementById("timestoloop").value);;
+var i;
+var dimensionalrebuke = "Really? " + input + " times? I'm not sure what dimension you are from, but we don't do that here. Please re-enter the 4th dimension at your earliest convenience.";
+var wastingserverbitsrebuke = "I know that looping " + input + " many times sounds fun, but do you really need to? The last thing we need is lost bits. Do you know how hard they are to catch?";
+if ( input < 1 ) {
+document.getElementById("rebuketheuser").innerHTML = dimensionalrebuke;
+document.getElementById("loopingarea").innerHTML = "";
+}
+else if ( input > 20 ) {
+document.getElementById("rebuketheuser").innerHTML = wastingserverbitsrebuke;
+document.getElementById("loopingarea").innerHTML = "";
+}
+else {
+document.getElementById("rebuketheuser").innerHTML = "";
+document.getElementById("loopingarea").innerHTML = "";
+//Why the + 1? Because the loop starts at 0.
+for (i = 0; i < input; i++) { 
+var element = document.createElement("P");
+var text = document.createTextNode("This is loop number " + Number(i + 1) + "!");
+element.appendChild(text);
+document.getElementById("loopingarea").appendChild(element);
+}
+}
+}
+
+function timer() {
+document.getElementById("whileloopingarea").innerHTML = "";
+var whileinput = Number(document.getElementById("secondstoloop").value);; 
+
+if ( whileinput < 1 ) {
+document.getElementById("rebuketheusermore").innerHTML = dimensionalrebuke;
+document.getElementById("whileloopingarea").innerHTML = "";
+}
+
+else if (whileinput > 20)
+{
+document.getElementById("whileloopingarea").innerHTML = "";
+document.getElementById("rebuketheusermore").innerHTML = wastingserverbitsrebuke;
+}
+else {
+	var x = 0; 
+	//var whileinput = Number(document.getElementById("secondstoloop").value);;
+	document.getElementById("rebuketheusermore").innerHTML = "";
+	while ( x < whileinput) {
+	document.getElementById("whileloopingarea").innerHTML += "</p>Looping! <p>";
+	x++;
+	}
+}
+}
+</script>
+
+<footer>
+<a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
+</footer>
+</body>
+</html>

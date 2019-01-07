@@ -1,1 +1,82 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+</head>
+<body>
+<div style="text-align: center; width: 20%; margin-left: auto; margin-right: auto;" >
+<h1>Conditions</h1>
+<h2>Dice Game: Roll your 2 dice and get a higher score than the dealer to win.</h2>
+<br>
+Choose how many sids the die will have. And don't even think about 0 or negative numbers.
+<br>
+<input type="number" id="numberofsides" value="6">
+<br>
+You chose a <p id="sideddie" style="display: inline;"></p> sided die.
+<button onclick="rolldice()">Roll Dice</button>
+<br>
+<div style="background-color: green; text-align: center;">
+You rolled
+<p id="yourfirstdice" style="display: inline;"></p> and <p id="yourseconddice" style="display: inline;"></p> totaling <p id="yourscore" style="display: inline;"></p>
+</div>
+<br>
+<div style="background-color: red; text-align: center;">
+The Dealer rolled
+<p id="theirfirstdice" style="display: inline;"></p> and <p id="theirseconddice" style="display: inline;"></p> totaling <p id="theirscore" style="display: inline;"></p>
+</div>
+<p id="gameresult" style="text-align: center;"></p>
+<p id="rebuketheuser" style="text-align: center;"></p>
+<script>
+function rolldice() {
+//Dice roll based on how many sides
+var numberofsides = document.getElementById("numberofsides").value;
+//For the user that inputs null or negative numbers. Some mockery of user occurs here.
+var rebuke = "Did you really just enter " + numberofsides + "? Please use a dice compatible in this dimension.";
+if ( numberofsides == null || numberofsides < 1) {
+numberofsides = 6;
+document.getElementById("rebuketheuser").innerHTML = rebuke;
+}
+else {
+document.getElementById("rebuketheuser").innerHTML = "";
+}
+//This math works out because we want 1 and not 0
+var your1roll = Number(Math.floor(Math.random() * (numberofsides)) + 1);
+var your2roll = Number(Math.floor(Math.random() * (numberofsides)) + 1);
+var their1roll = Number(Math.floor(Math.random() * (numberofsides)) + 1);
+var their2roll = Number(Math.floor(Math.random() * (numberofsides)) + 1);
+//Math of the 2 dice being added
+var yourtotal = your1roll + your2roll;
+var theirtotal = their1roll + their2roll;
+//Displaying the information
+document.getElementById("sideddie").innerHTML = numberofsides;
+document.getElementById("yourfirstdice").innerHTML = your1roll;
+document.getElementById("yourseconddice").innerHTML = your2roll;
+document.getElementById("yourscore").innerHTML = yourtotal;
+document.getElementById("theirfirstdice").innerHTML = their1roll;
+document.getElementById("theirseconddice").innerHTML = their2roll;
+document.getElementById("theirscore").innerHTML = theirtotal;
+//Game result message
+var victory = "You Win!";
+var defeat = "You Lose!";
+var tie = "It's a Tie!";
+//CHECK FOR WINNER AND DISPLAY
+if ( yourtotal > theirtotal ) {
+document.getElementById("gameresult").innerHTML = victory;
+document.getElementById("gameresult").style.backgroundColor = "green";
+} 
+if ( yourtotal < theirtotal ) {
+document.getElementById("gameresult").innerHTML = defeat;
+document.getElementById("gameresult").style.backgroundColor = "red";
+}
+if ( yourtotal == theirtotal ) {
+document.getElementById("gameresult").innerHTML = tie;
+document.getElementById("gameresult").style.backgroundColor = "yellow";
+}
+}
+</script>
+<footer>
+<a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
+</footer>
+</div>
+</body>
+</html>

@@ -1,1 +1,63 @@
+<!DOCTYPE html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+</head>
+<body style="margin: auto; text-align: center;">
+<div style="background-color: blue; color:white;">
+<h1>Arrays</h1>
+<br>
+</div>
+<div style="background-color: yellow;">
+Add an array element<br>
+<input type="text" id="addelement" value=""> 
+<br><br>
+<button onclick="addtoarray()">Add to Array</button>
+<br><br>
+</div>
+<div style="background-color: red;">
+Replace an array element<br>
+New array element text<br>
+<input type="text" id="changearray" value=""> 
+<br><br>
+Select element number <br>
+(Javascript arrays start with 0)<br>
+<input type="number" id="changenum" value=""> 
+<br><br>
+<button onclick="changecontent()">Change an Array Element</button>
+<br><br>
+</div>
 
+<br><br>
+The array contains:
+<p id="arraycontents"></p><br><br>
+<button onclick="cleararray()">Clear Array</button>
+
+<br><br><br><br>
+<p>Explanation: The array is created on pageload, while the functions manipulate the array. Each of the buttons triggers a function.</p>
+<script>
+var array = []; 
+
+function addtoarray() {
+array.push( document.getElementById("addelement").value);;
+document.getElementById("arraycontents").innerHTML = array.toString();
+}
+
+function cleararray() {
+array = [];
+document.getElementById("arraycontents").innerHTML = array.toString();
+}
+
+function changecontent() {
+var changeentry = document.getElementById("changearray").value;
+var elementnum = Number(document.getElementById("changenum").value);;
+array[elementnum] = changeentry;
+document.getElementById("arraycontents").innerHTML = array.toString();
+}
+</script>
+
+
+<footer>
+<a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
+</footer>
+</body>
+</html>
