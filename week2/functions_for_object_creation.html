@@ -1,1 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+</head>
+<body>
+<h1>Object Creation!</h1>
+This page is devoid of parties and parrots, Choose a parrot to start this party! Now with music!
+<!--This is for the party song-->
+<audio id="partyAudio">
+  <source src="Let's_Party_Master.mp3" type="audio/mpeg">
+  Try a different browser
+</audio>
+<br>
+<!--For creating the parrot object -->
+<select id="action">
+  <option value="Jumping">Jumping</option>
+  <option value="Flapping">Flapping</option>
+  <option value="Squaking">Squaking</option>
+  <option value="Head-Banging">Head-Banging</option>
+</select><br>
+<select id="color">
+  <option value="Blue">Blue</option>
+  <option value="Green">Green</option>
+  <option value="Red">Red</option>
+  <option value="Multi-Colored">Multi-Colored</option>
+</select><br>
+<select id="name">
+  <option value="Polly">Polly</option>
+  <option value="Jack">Jack</option>
+  <option value="Cockatoo">Cockatoo</option>
+  <option value="Rainbow-Bird">Rainbow-Bird</option>
+</select><br>
 
+<button onclick="getthepartystarted()">It's Party Time!</button><br>
+Hit the button for even more parrots!<br>
+
+
+<p id="partyarea"></p>
+
+Too much awesome, stop the music!<br>
+<button onclick="stopparty()">Stop The Party</button><br><br>
+<script>
+var parrots = [
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/l3q2zVr6cu95nF6O4" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/producthunt-party-parrot-parrots-l3q2zVr6cu95nF6O4">via GIPHY</a></p>'
+,
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/7o6oVRTLFI2GY" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/7o6oVRTLFI2GY">via GIPHY</a></p>'
+,
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/d4gBdh8EtEJhu" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/death-metal-d4gBdh8EtEJhu">via GIPHY</a></p>'
+,
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/12ZdIpaEVuRwTm" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/dancing-parrot-rpartyparrot-12ZdIpaEVuRwTm">via GIPHY</a></p>'
+,
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/D4znY24YWrFW8" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/happy-parrot-D4znY24YWrFW8">via GIPHY</a></p>'
+,
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/10v0l8aVLyLJ5e" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/cheezburger-dancing-parrots-10v0l8aVLyLJ5e">via GIPHY</a></p>'
+,
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/xS8cUvBG8pkPu" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/birds-toys-critters-xS8cUvBG8pkPu">via GIPHY</a></p>'
+];
+function getthepartystarted() {
+var parrotnumber = Number(Math.floor(Math.random() * (parrots.length)));
+document.getElementById("partyAudio").pause();
+document.getElementById("partyAudio").play();
+var actioninput = document.getElementById("action").value;
+var colorinput = document.getElementById("color").value;
+var parrotname = document.getElementById("name").value;
+var parrot = {
+  parrotAction: actioninput,
+  parrotName: parrotname,
+  parrotColor : colorinput,
+  partyTime : function() {
+    return this.parrotAction + " " + this.parrotColor + " " + this.parrotName + " thinks it's time to party!";
+  }
+};
+document.getElementById("partyarea").innerHTML = parrots[parrotnumber] + parrot.partyTime();
+}
+
+function stopparty() {
+document.getElementById("partyAudio").pause();
+document.getElementById("partyarea").innerHTML = "";
+}
+</script>
+
+<footer>
+<a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
+</footer>
+</body>
+</html>
