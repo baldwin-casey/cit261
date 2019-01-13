@@ -33,13 +33,16 @@ This page is devoid of parties and parrots, Choose a parrot to start this party!
 </select><br>
 
 <button onclick="getthepartystarted()">It's Party Time!</button><br>
-Hit the button for even more parrots!<br>
+Hit the button for even more parrots! (The parrot gif is a random parrot)<br>
 
 
-<p id="partyarea"></p>
+<div id="partyarea"></div><br><br>
+
 
 Too much awesome, stop the music!<br>
 <button onclick="stopparty()">Stop The Party</button><br><br>
+Explanation: The parrot object is created once the party button is hit. This parrot has three attributes, name, color and it's action. Each time you press the button, it creates a new object with the specified attributes.
+<br>
 <script>
 var parrots = [
 '<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/l3q2zVr6cu95nF6O4" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/producthunt-party-parrot-parrots-l3q2zVr6cu95nF6O4">via GIPHY</a></p>'
@@ -55,6 +58,10 @@ var parrots = [
 '<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/10v0l8aVLyLJ5e" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/cheezburger-dancing-parrots-10v0l8aVLyLJ5e">via GIPHY</a></p>'
 ,
 '<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/xS8cUvBG8pkPu" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/birds-toys-critters-xS8cUvBG8pkPu">via GIPHY</a></p>'
+,
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/CBaMdovM8jfJS" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/party-colorful-parrot-CBaMdovM8jfJS">via GIPHY</a></p>'
+,
+'<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/5PSPV1ucLX31u" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/animal-parrot-5PSPV1ucLX31u">via GIPHY</a></p>'
 ];
 function getthepartystarted() {
 var parrotnumber = Number(Math.floor(Math.random() * (parrots.length)));
@@ -71,7 +78,7 @@ var parrot = {
     return this.parrotAction + " " + this.parrotColor + " " + this.parrotName + " thinks it's time to party!";
   }
 };
-document.getElementById("partyarea").innerHTML = parrots[parrotnumber] + parrot.partyTime();
+document.getElementById("partyarea").innerHTML += "<p>" + parrots[parrotnumber] + parrot.partyTime() + "</p>";
 }
 
 function stopparty() {
@@ -79,7 +86,7 @@ document.getElementById("partyAudio").pause();
 document.getElementById("partyarea").innerHTML = "";
 }
 </script>
-
+<br>
 <footer>
 <a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
 </footer>
