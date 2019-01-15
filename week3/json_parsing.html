@@ -1,1 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+</head>
+<body>
+<h1>JSON Parsing And Stringify!</h1>
+<p id="string"></p>
+<p id="JSON"></p>
+<p id="JSONContents"></p>
 
+<script>
+var obj = { name: "Casey", age: 26, city: "Rexburg", favfood: "Steak", eyecolor: "Blue"};
+var myString = JSON.stringify(obj);
+var myJSON = JSON.parse(myString);
+document.getElementById("string").innerHTML = "The raw data is: <b>" + myString + "</b>";
+document.getElementById("JSON").innerHTML = "The original object and the parsed JSON is: <b>" + myJSON + "</b> This is normal, as this is an object.";
+document.getElementById("JSONContents").innerHTML = "The contents of the object are: <b>" + myJSON.name + ", is " + myJSON.age + " years old, is from " + myJSON.city + " has " + myJSON.eyecolor + " eyes, and favorite food is " + myJSON.favfood + "</b>";
+</script>
+
+Explanation: Why parse and stringify? This is all about converting from an object to a string and back. This is so a server can process the information. A server can not process an object, but it can process a string. FUNCTIONS DO NOT TRANSLATE INTO A STRING. SO JUST DON'T.<br>
+<br>
+<footer>
+<a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
+</footer>
+</body>
+</html>
