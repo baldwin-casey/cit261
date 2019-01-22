@@ -1,1 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
+</head>
+<body>
+<h1>XML!</h1>
+<p id="conditions"></p>
+<button onclick="getbandconditions()">Get Band Conditions</button><br>
+Explanation: I am into ham radio, and it is important to know which radio bands have the most favorable conditions. This simply checks an RSS feed/XML feed from http://www.hamqsl.com/solar.html. The owner has asked that this does not refresh every request. So I set up a time limit.
+<br>
+Disclaimer: I was not able to implement this in a way I wanted due to same domain policy, in order to do this correctly, I would use a web scraper and JQuery.
+<script>
+function getbandconditions() {
+var xhttp = new XMLHttpRequest();
+xhttp.open("GET", "solarxml.xml", true);
+xhttp.send();
+document.getElementById("conditions").innerHTML = xhttp.responseText;
+}
 
+</script>
+
+</body>
