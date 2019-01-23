@@ -7,17 +7,27 @@
 <h1>XML!</h1>
 <p id="conditions"></p>
 <button onclick="getbandconditions()">Get Band Conditions</button><br>
-Explanation: I am into ham radio, and it is important to know which radio bands have the most favorable conditions. This simply checks an RSS feed/XML feed from http://www.hamqsl.com/solar.html. The owner has asked that this does not refresh every request. So I set up a time limit.
+Explanation: I am into ham radio, and it is important to know which radio bands have the most favorable conditions. http://www.hamqsl.com/solar.html 
 <br>
-Disclaimer: I was not able to implement this in a way I wanted due to same domain policy, in order to do this correctly, I would use a web scraper and JQuery.
+Disclaimer: I was not able to implement this in a way I wanted due to same domain policy. I copied an XML file and sort that. In order to do this correctly, I would use a web scraper and JQuery.
 <script>
 function getbandconditions() {
+var link = "https://baldwin-casey.github.io/cit261/week4/solarxml.xml";
 var xhttp = new XMLHttpRequest();
-xhttp.open("GET", "solarxml.xml", true);
-xhttp.send();
-document.getElementById("conditions").innerHTML = xhttp.responseText;
-}
+xhttp.onreadystatechange = function() {
+var temp = xhttp.responseXML;
 
+var parser = new DOMParser();
+var xmlDoc = parser.parseFromString(xhttp.responseText, "text/xml");;
+
+document.getElementById("conditions").innerHTML = JSON.stringify(temp);//[0].childNodes[0].nodeValue;
+//document.getElementById("conditions").innerHTML = JSON.stringify(xhttp.getElementsByTagName("band")[0].childNodes[0].nodeValue);
+}
+xhttp.open('GET', link, true);
+xhttp.send();
+
+
+}
 </script>
 
 </body>

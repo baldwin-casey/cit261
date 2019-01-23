@@ -6,35 +6,76 @@
 <body>
 <h1>Local Storage!</h1>
 
+Choose some cookies!<br><br>
+What Type of cookie?<br>
 <select id="cookie">
-  <option style="background-image:url(https://www.ifyougiveablondeakitchen.com/wp-content/uploads/2016/07/chipwich-cookie-ice-cream-sandwich-7.2016.jpg);" value="Sandwich"></option>
-  <option value="Flapping">Flapping</option>
-  <option value="Squaking">Squaking</option>
-  <option value="Head-Banging">Head-Banging</option>
-</select><br>
-<select id="number">
-  <option value="Blue">Blue</option>
-  <option value="Green">Green</option>
-  <option value="Red">Red</option>
-  <option value="Multi-Colored">Multi-Colored</option>
-</select><br>
-<select id="">
-  <option value="Polly">Polly</option>
-  <option value="Jack">Jack</option>
-  <option value="Cockatoo">Cockatoo</option>
-  <option value="Rainbow-Bird">Rainbow-Bird</option>
-</select><br>
+  <option value="Sandwich">Sandwich</option>
+  <option value="Frosted">Frosted</option>
+  <option value="Cream">Cream</option>
+</select><br><br>
 
-<button onclick="givemeacookie" onbuttone>Give Me a Cookie!</button><br><br>
-<button onclick="throwawaycookies">Throw Away The Cookies :-(</button><br><br>
-Explanation: This is a cookie generator, but does not have anything to do with actual internet cookies. Localstorage is similar but more powerful.
+What flavor?<br>
+<select id="flavor">
+  <option value="Chocolate">Chocolate</option>
+  <option value="Vanilla">Vanilla</option>
+  <option value="Broccoli">Broccoli</option>
+  <option value="Red Velvet">Red Velvet</option>
+</select><br><br>
+How Many?<br>
+<input type="number" id="numberofcookies" value="1"> <br><br>
+
+<p id="cookiedisplay"></p>
+<button onclick="givemeacookie()">Give Me a New Cookie!</button><br><br>
+<button onclick="showmethecookies()">Reload Your Old Cookies</button><br><br>
+<button onclick="throwawaycookies()">Throw Away The Cookies :-(</button><br><br>
+Explanation: This is a cookie generator, but does not have anything to do with actual internet cookies. Generate a cookie, then reload the page then reload your cookie. Click throw away cookies to clear the local storage.
 <script>
 function givemeacookie() {
-
+var cookie = document.getElementById("cookie").value;
+var flavor = document.getElementById("flavor").value;
+var numberofcookies = document.getElementById("numberofcookies").value;
+var cookielink = "";
+if (cookie === "Frosted") {
+cookielink = "Frosted";
+}
+else if (cookie === "Sandwich") {
+cookielink = "Sandwich";
+}
+else if (cookie === "Cream") {
+cookielink = "Cream";
 };
 
-function throwawaycookies() {
+if (flavor === "Chocolate") {
+cookielink += " Chocolate";
+}
 
+if (flavor === "Vanilla") {
+cookielink += " Vanilla";
+}
+
+if (flavor === "Broccoli") {
+cookielink = "Broccoli";
+}
+
+if (flavor === "Red Velvet") {
+cookielink += " Red Velvet";
+}
+if (numberofcookies < 1) {
+numberofcookies = 1;
+}
+localStorage.setItem("savedcookie", numberofcookies + " " + cookielink);
+document.getElementById("cookiedisplay").innerHTML = '<img src="https://unlockthedoortolearning.files.wordpress.com/2016/06/cookie-with-sunglasses.gif" height="42" width="42"><p>' + numberofcookies + " " + cookielink + ' cookie!</p>';
+};
+
+function showmethecookies() {
+document.getElementById("cookiedisplay").innerHTML = '<img src="https://unlockthedoortolearning.files.wordpress.com/2016/06/cookie-with-sunglasses.gif" height="42" width="42"><p>' + localStorage.getItem("savedcookie") + " was saved from the past.</p>";
+if (localStorage.getItem("savedcookie") === null) {
+document.getElementById("cookiedisplay").innerHTML = '<img src="https://pbs.twimg.com/profile_images/811341743371194368/353_ttjx_400x400.jpg" height="42" width="42"><p>' + "No cookies found.</p>";
+}
+};
+function throwawaycookies() {
+localStorage.removeItem("savedcookie");
+document.getElementById("cookiedisplay").innerHTML = "Aww, no more cookies :-(";
 };
 </script>
 </body>
