@@ -31,35 +31,15 @@ How Many?<br>
 Explanation: This is a cookie generator, but does not have anything to do with actual internet cookies. Generate a cookie, then reload the page then reload your cookie. Click throw away cookies to clear the local storage.
 <script>
 function givemeacookie() {
-var cookie = document.getElementById("cookie").value;
+var cookie = 
+{ 
+type: document.getElementById("cookie").value,
+flavor: document.getElementById("flavor").value 
+};
 var flavor = document.getElementById("flavor").value;
 var numberofcookies = document.getElementById("numberofcookies").value;
-var cookielink = "";
-if (cookie === "Frosted") {
-cookielink = "Frosted";
-}
-else if (cookie === "Sandwich") {
-cookielink = "Sandwich";
-}
-else if (cookie === "Cream") {
-cookielink = "Cream";
-};
+var cookielink = JSON.stringify(cookie);
 
-if (flavor === "Chocolate") {
-cookielink += " Chocolate";
-}
-
-if (flavor === "Vanilla") {
-cookielink += " Vanilla";
-}
-
-if (flavor === "Broccoli") {
-cookielink = "Broccoli";
-}
-
-if (flavor === "Red Velvet") {
-cookielink += " Red Velvet";
-}
 if (numberofcookies < 1) {
 numberofcookies = 1;
 }
