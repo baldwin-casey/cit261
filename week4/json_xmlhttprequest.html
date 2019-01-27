@@ -5,6 +5,7 @@
 </head>
 <body>
 <h1>XML!</h1>
+<p id="time"></p>
 <p id="conditions"></p>
 <button onclick="getbandconditions()">Get Band Conditions</button><br>
 Explanation: I am into ham radio, and it is important to know which radio bands have the most favorable conditions. http://www.hamqsl.com/solar.html 
@@ -12,21 +13,19 @@ Explanation: I am into ham radio, and it is important to know which radio bands 
 Disclaimer: I was not able to implement this in a way I wanted due to same domain policy. I copied an XML file and sort that. In order to do this correctly, I would use a web scraper and JQuery.
 <script>
 function getbandconditions() {
-var link = "https://baldwin-casey.github.io/cit261/week4/solarxml.txt";
+var link = "https://baldwin-casey.github.io/cit261/week4/solarxml.xml";
 var xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
-var temp = xhttp.responseXML;
-
-var parser = new DOMParser();
-var xmlDoc = parser.parseFromString(xhttp.responseText, "text/xml");;
-
-document.getElementById("conditions").innerHTML = JSON.stringify(temp);//[0].childNodes[0].nodeValue;
-//document.getElementById("conditions").innerHTML = JSON.stringify(xhttp.getElementsByTagName("band")[0].childNodes[0].nodeValue);
+if (this.readyState == 4 && this.status == 200) {
+document.getElementById("conditions").innerHTML += "<p>As of " + "<b>" + xhttp.responseXML.getElementsByTagName("updated")[0].childNodes[0].nodeValue + "</b></p>";
+document.getElementById("conditions").innerHTML += "<p>The 80 and 40 Meter bands are " + xhttp.responseXML.getElementsByTagName("band")[0].childNodes[0].nodeValue + " during the day and " + xhttp.responseXML.getElementsByTagName("band")[4].childNodes[0].nodeValue + " at night.</p>";
+document.getElementById("conditions").innerHTML += "<p>The 30 and 20 Meter bands are " + xhttp.responseXML.getElementsByTagName("band")[1].childNodes[0].nodeValue + " during the day and " + xhttp.responseXML.getElementsByTagName("band")[5].childNodes[0].nodeValue + " at night.</p>";
+document.getElementById("conditions").innerHTML += "<p>The 17 and 15 Meter bands are " + xhttp.responseXML.getElementsByTagName("band")[2].childNodes[0].nodeValue + " during the day and " + xhttp.responseXML.getElementsByTagName("band")[6].childNodes[0].nodeValue + " at night.</p>";
+document.getElementById("conditions").innerHTML += "<p>The 12 and 10 Meter bands are " + xhttp.responseXML.getElementsByTagName("band")[3].childNodes[0].nodeValue + " during the day and " + xhttp.responseXML.getElementsByTagName("band")[7].childNodes[0].nodeValue + " at night.</p>";
+}
 }
 xhttp.open('GET', link, true);
 xhttp.send();
-
-
 }
 </script>
 
