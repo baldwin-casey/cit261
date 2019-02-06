@@ -1,1 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
+</head>
+<body>
+<h1>Manipulate the DOM!</h1>
+<p id="manipulateme">Modify this line of text.</p>
+<select>
+<option value="first">first</option>
+</select><br><br><br>
+<img id="changeme" src="https://www.catster.com/wp-content/uploads/2017/10/A-kitten-meowing-with-his-mouth-open.jpg" width="50" height="50" alt="Insert Picture here"></img><br>
+<input type="text" name="imgurl">
+<select>
+<option value="first">first</option>
+</select><br><br>
+<button onclick="changeimage()">Change The Image</button><br><br>
 
+<button onclick="saveinputs()">Save your inputs</button><br><br>
+<button onclick="getsavedinputs()">Load your saved inputs</button><br><br>
+<button onclick="clearinputs()">Clear all saved saved inputs</button><br><br>
+<button onclick="overwrite()" style="background-color: #f44336;">Overwrite Page</button><br><br>
+Explanation: 
+<script>
+
+function changetext() {
+
+}
+
+function changeimage() {
+var url = value.toString(document.getElementById("imgurl"));
+document.getElementById("changeme").src = url;
+};
+
+function saveinputs() {
+localstorage.setItem();
+}
+
+function getsavedinputs() {
+//if localstorage
+localstorage.getItem();
+}
+
+function cleatinputs() {
+localstorage.clear();
+}
+
+function overwrite() {
+document.write('<button onclick="reload()">Reload Page</button><br><br>');
+}
+
+function reload() {
+location.reload();
+}
+</script>
+
+<footer>
+<a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
+</footer>
+</div>
+</body>
+</html>
