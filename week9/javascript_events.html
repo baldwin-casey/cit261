@@ -33,63 +33,117 @@ transform: translateY(-50%);
 <h1>Javascript Events!</h1>
 Catch the garlic bread! 
 <div class="row">
-<div id="1" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
+<div id="1" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
-<div id="2" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
+<div id="2" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
-<div id="3" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
-</div>
-</div>
-<div class="row">
-<div id="4" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
-</div>
-<div id="5" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
-</div>
-<div id="6" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
+<div id="3" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
 </div>
 <div class="row">
-<div id="7" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
+<div id="4" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
-<div id="8" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
+<div id="5" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
-<div id="9" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()">
+<div id="6" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
 </div>
-<p id="test"></p><br>
+<div class="row">
+<div id="7" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+</div>
+<div id="8" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+</div>
+<div id="9" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+</div>
+</div>
+<p id="test">Try to catch the garlic bread!</b></p><br>
+<p id="banned">Click a square to stop the garlic bread from appearing there</p>
+<button onclick="buttonpress()">Move The Bread</button><br><br>
+<button onclick="removeban()">Remove the Ban</button><br><br>
 Explanation: The boxes are divs with a numbered ID. When a users mouse enters the div, it checks for the cursor div id and compares it to the garlic bread div id. If they are a match, it assigns the garlic bread a new id and clears the old garlic bread. The garlic bread should be uncatchable.
+<p> Why garlic bread? Because it's amazing!</p>
 <script>
-var cursorlocation;
+var cursorlocation = 10;
 //start the garlic bread with a space
 var breadlocation = Math.floor(Math.random() * 9) + 1;
+var banneddiv;
 document.getElementById(breadlocation).innerHTML = '<img src="https://cdn.shopify.com/s/files/1/1457/1254/products/Garlic_bread_580x@2x.jpg?v=1476652397"/>';
+
 //Runs after every box is touched
 function breadcheck() { 
 //Gets the id of the div that was hovered over
 cursorlocation = event.target.getAttribute('id');
+//this checks if the div is banned, and changes the color to green, else it is grey
+if (banneddiv == cursorlocation) {
+document.getElementById(cursorlocation).style.backgroundColor = 'green';
+}
+else {
 document.getElementById(cursorlocation).style.backgroundColor = 'grey';
-//clear the bread
-document.getElementById(breadlocation).innerHTML = '';
+}
 //Checks to make sure the new bread value is not already a match with the cursor
-while (breadlocation == cursorlocation) {
+while (breadlocation == cursorlocation || breadlocation == banneddiv) {
+movebread();
+}
+displaybread();
+}
+
+//Ban the bread from a div
+function breadban() {
+//change old banned square back to blue
+//This checks if there is a current ban before it bans another, else it breaks things
+if (banneddiv != null) {
+document.getElementById(banneddiv).style.backgroundColor = 'blue';
+}
+banneddiv = event.target.getAttribute('id');
+document.getElementById(banneddiv).style.backgroundColor = 'red';
+document.getElementById("banned").innerHTML = 'The garlic bread has been banned from #<b>' + banneddiv + '</b>';
+}
+
+//Change color back to blue after user cursor leaves
+function mouseoutchangecolor() {
+if (cursorlocation != banneddiv) {
+document.getElementById(cursorlocation).style.backgroundColor = 'blue';
+}
+else {
+document.getElementById(cursorlocation).style.backgroundColor = 'red';
+}
+}
+
+function movebread() {
+//clear old bread
+document.getElementById(breadlocation).innerHTML = '';
+//generate new bread location
 breadlocation = Math.floor(Math.random() * 9) + 1;
 }
-//Display bread in the correct new div
+
+function displaybread() {
+//NEEDS MORE GARLIC BREAD
 document.getElementById(breadlocation).innerHTML = '<img src="https://cdn.shopify.com/s/files/1/1457/1254/products/Garlic_bread_580x@2x.jpg?v=1476652397"/>';
 //Display info about the cursor location and bread location
 document.getElementById("test").innerHTML = 'Your cursor was last in #<b>' + cursorlocation + '</b> and the garlic bread is in box #<b>' + breadlocation + '</b>';
-
 }
 
-//Change color back to blue
-function mouseoutchangecolor() {
-document.getElementById(cursorlocation).style.backgroundColor = 'blue'
+//for the button
+function buttonpress() {
+//movebread once, and if it mataches the banneddiv, do over until it does not.
+movebread();
+while (breadlocation == banneddiv) {
+movebread();
+}
+displaybread();
+}
+
+//remove the ban
+function removeban() {
+document.getElementById(banneddiv).style.backgroundColor = 'blue';
+banneddiv = null;
+document.getElementById("banned").innerHTML = "Click a square to stop the garlic bread from appearing there";
 }
 
 //For someone trying to use a mobile device, this will popup a warning saying it wont work.
 function isMobileDevice() {
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-alert('THIS DOES NOT WORK ON MOBILE BROWSERS');
+alert('THIS DOES NOT WORK CORRECTLY ON MOBILE BROWSERS');
 }
 }
 </script>
