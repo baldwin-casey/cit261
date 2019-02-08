@@ -5,53 +5,47 @@
 </head>
 <body>
 <h1>Manipulate the DOM!</h1>
-<p id="manipulateme">Modify this line of text.</p>
+You will write a quiz game which will be stored in localstorage which you can save and recall for later.
 <select>
-<option value="first">first</option>
-</select><br><br><br>
-<img id="changeme" src="https://www.catster.com/wp-content/uploads/2017/10/A-kitten-meowing-with-his-mouth-open.jpg" width="50" height="50" alt="Insert Picture here"></img><br>
-<input type="text" name="imgurl">
-<select>
-<option value="first">first</option>
-</select><br><br>
-<button onclick="changeimage()">Change The Image</button><br><br>
+<option id="1"
 
-<button onclick="saveinputs()">Save your inputs</button><br><br>
-<button onclick="getsavedinputs()">Load your saved inputs</button><br><br>
-<button onclick="clearinputs()">Clear all saved saved inputs</button><br><br>
-<button onclick="overwrite()" style="background-color: #f44336;">Overwrite Page</button><br><br>
+<div id="entry">
+
+</div>
+Quiz Game
+<div id="game">
+<div id="question">
+</div>
+<div id="options">
+<div id="option1">
+</div>
+<div id="option2">
+</div>
+<div id="option3">
+</div>
+<button id="Answer">Submit Answer</button>
+<div id="option4">
+</div>
+</div> 
+</div>
+<div id="result">
+</div>
 Explanation: 
 <script>
-
-function changetext() {
-
+var gamecontent = {
+;
+function gameover() {
+if (gameresult == win) {
+Correct!
+}
+else { 
+Incorrect!
+}
 }
 
-function changeimage() {
-var url = value.toString(document.getElementById("imgurl"));
-document.getElementById("changeme").src = url;
-};
+function loadgame() {} 
 
-function saveinputs() {
-localstorage.setItem();
-}
 
-function getsavedinputs() {
-//if localstorage
-localstorage.getItem();
-}
-
-function cleatinputs() {
-localstorage.clear();
-}
-
-function overwrite() {
-document.write('<button onclick="reload()">Reload Page</button><br><br>');
-}
-
-function reload() {
-location.reload();
-}
 </script>
 
 <footer>
