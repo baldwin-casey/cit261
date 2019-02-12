@@ -33,46 +33,53 @@ transform: translateY(-50%);
 <h1>Javascript Events!</h1>
 Catch the garlic bread! 
 <div class="row">
-<div id="1" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+<div id="1" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
-<div id="2" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+<div id="2" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
-<div id="3" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
-</div>
-</div>
-<div class="row">
-<div id="4" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
-</div>
-<div id="5" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
-</div>
-<div id="6" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+<div id="3" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
 </div>
 <div class="row">
-<div id="7" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+<div id="4" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
-<div id="8" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+<div id="5" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
-<div id="9" class="display" onmouseenter="breadcheck()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+<div id="6" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+</div>
+</div>
+<div class="row">
+<div id="7" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+</div>
+<div id="8" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
+</div>
+<div id="9" class="display" onmouseenter="getmouseinput()" onmouseleave="mouseoutchangecolor()" onclick="breadban()">
 </div>
 </div>
 <p id="test">Try to catch the garlic bread!</b></p><br>
+<p id="test2">Enter a number here to select a box.</b></p><br>
+<input type="number" id="keyboardnumber" onkeydown="keyboardbreadcheck()" onkeyup="startcleartimer()">
 <p id="banned">Click a square to stop the garlic bread from appearing there</p>
 <button onclick="buttonpress()">Move The Bread</button><br><br>
 <button onclick="removeban()">Remove the Ban</button><br><br>
-Explanation: The boxes are divs with a numbered ID. When a users mouse enters the div, it checks for the cursor div id and compares it to the garlic bread div id. If they are a match, it assigns the garlic bread a new id and clears the old garlic bread. The garlic bread should be uncatchable.
-<p> Why garlic bread? Because it's amazing!</p>
+Explanation: The boxes are divs with a numbered ID. When a users mouse enters the div or keyboard selects the number, it checks for the cursor id and compares it to the garlic bread div id. If they are a match, it assigns the garlic bread a new id and clears the old garlic bread. The garlic bread should be uncatchable.
+<p> Why garlic bread? Because it's amazing! And it's so good that I don't want to share!</p>
 <script>
-var cursorlocation = 10;
+var cursorlocation = null;
 //start the garlic bread with a space
 var breadlocation = Math.floor(Math.random() * 9) + 1;
 var banneddiv;
 document.getElementById(breadlocation).innerHTML = '<img src="https://cdn.shopify.com/s/files/1/1457/1254/products/Garlic_bread_580x@2x.jpg?v=1476652397"/>';
-
+//declaration for keyboard
+var x = null;
 //Runs after every box is touched
-function breadcheck() { 
+function getmouseinput() {
 //Gets the id of the div that was hovered over
 cursorlocation = event.target.getAttribute('id');
+breadcheck();
+}
+function breadcheck() { 
+//cursorlocation = event.target.getAttribute('id');
 //this checks if the div is banned, and changes the color to green, else it is grey
 if (banneddiv == cursorlocation) {
 document.getElementById(cursorlocation).style.backgroundColor = 'green';
@@ -120,7 +127,7 @@ function displaybread() {
 //NEEDS MORE GARLIC BREAD
 document.getElementById(breadlocation).innerHTML = '<img src="https://cdn.shopify.com/s/files/1/1457/1254/products/Garlic_bread_580x@2x.jpg?v=1476652397"/>';
 //Display info about the cursor location and bread location
-document.getElementById("test").innerHTML = 'Your cursor was last in #<b>' + cursorlocation + '</b> and the garlic bread is in box #<b>' + breadlocation + '</b>';
+document.getElementById("test").innerHTML = 'Your selected box is #<b>' + cursorlocation + '</b> and the garlic bread is in box #<b>' + breadlocation + '</b>';
 }
 
 //for the button
@@ -140,6 +147,53 @@ banneddiv = null;
 document.getElementById("banned").innerHTML = "Click a square to stop the garlic bread from appearing there";
 }
 
+//Another event, because I am out of ideas
+function keyboardbreadcheck() {
+x = event.key;
+//some if statements, just to check for bad inputs or unexpected stuff
+if (x > 9) {
+cursorlocation = 9; 
+}
+else if (x < 1){
+cursorlocation = 1;
+}
+else {
+cursorlocation = x;
+}
+if (cursorlocation == null) {
+null;
+}
+else {
+document.getElementById(cursorlocation).style.backgroundColor = 'grey';
+document.getElementById("test2").innerHTML = "You selected <b>" + cursorlocation + "</b> with your keyboard.";
+startcleartimer();
+breadcheck();
+}
+}
+
+function startcleartimer() {
+setTimeout(clearkeyboard, 2000);
+}
+
+function clearkeyboard() {
+//All these lines are to clear the display in case of multiple inputs.
+document.getElementById(cursorlocation).style.backgroundColor = 'blue';
+document.getElementById("1").style.backgroundColor = 'blue';
+document.getElementById("2").style.backgroundColor = 'blue';
+document.getElementById("3").style.backgroundColor = 'blue';
+document.getElementById("4").style.backgroundColor = 'blue';
+document.getElementById("5").style.backgroundColor = 'blue';
+document.getElementById("6").style.backgroundColor = 'blue';
+document.getElementById("7").style.backgroundColor = 'blue';
+document.getElementById("8").style.backgroundColor = 'blue';
+document.getElementById("9").style.backgroundColor = 'blue';
+document.getElementById("keyboardnumber").value = '';
+document.getElementById("test2").innerHTML = "Enter a number here to select a box.";
+//To redisplay the banned dive if it has been set.
+if (banneddiv != null) {
+document.getElementById(banneddiv).style.backgroundColor = 'red';
+}
+}
 //For someone trying to use a mobile device, this will popup a warning saying it wont work.
 function isMobileDevice() {
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
