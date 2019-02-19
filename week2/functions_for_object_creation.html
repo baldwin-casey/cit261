@@ -87,7 +87,7 @@ var currentparrot = new parrot(actioninput, colorinput, parrotname);
 //So it displays the correct parrot number
 parrotcounter = parrotcounter + 1;
 //This line displays the gif and the properties of the new parrot object.
-document.getElementById("partyarea").innerHTML += "<civ><p> Parrot Number:" + parrotcounter + " " + parrots[parrotnumber] + currentparrot.partyTime() + "</p></div>";
+document.getElementById("partyarea").innerHTML += '<div style="border: 2px solid black"><p> Parrot Number:' + parrotcounter + " " + parrots[parrotnumber] + currentparrot.partyTime() + "</p></div>";
 }
 
 function stopparty() {
