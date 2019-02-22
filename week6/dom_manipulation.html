@@ -3,50 +3,34 @@
 <head>
 <link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
 </head>
-<body>
+<body id="page">
 <h1>Manipulate the DOM!</h1>
 <p id="manipulateme">Modify this line of text.</p>
-<select>
-<option value="first">first</option>
-</select><br><br><br>
-<img id="changeme" src="https://www.catster.com/wp-content/uploads/2017/10/A-kitten-meowing-with-his-mouth-open.jpg" width="50" height="50" alt="Insert Picture here"></img><br>
-<input type="text" name="imgurl">
-<select>
-<option value="first">first</option>
-</select><br><br>
-<button onclick="changeimage()">Change The Image</button><br><br>
+<input type="text" id="newtext" value="Enter New Text Here."><br>
+<button onclick="changetext()">Change the text</button><br><br><br>
+<img id="changeme" src="https://www.catster.com/wp-content/uploads/2017/10/A-kitten-meowing-with-his-mouth-open.jpg" width="50" height="50"></img><br>
+<input type="text" id="imgurl"><br>
+<button onclick="changeimage()">Change The Image</button>--Paste any image URL<br><br>
+<button onclick="randomfont()">Change The Page Font Size</button><br><br>
+<button onclick="randomfontstyle()">Change the Page Font Style</button><br><br>
+<button onclick="randomfontfamily()">Change the Page Font</button><br><br>
 
-<button onclick="saveinputs()">Save your inputs</button><br><br>
-<button onclick="getsavedinputs()">Load your saved inputs</button><br><br>
-<button onclick="clearinputs()">Clear all saved saved inputs</button><br><br>
 <button onclick="overwrite()" style="background-color: #f44336;">Overwrite Page</button><br><br>
-Explanation: 
+Explanation: Each of these buttons manipulates a part of the page, each in their own way. 
 <script>
+//so the variable is not lost when the function ends.
+var currentstyle = 'normal';
+var currentfontfamily = ''
 
 function changetext() {
-
+var changedtext = document.getElementById("newtext").value;
+document.getElementById("manipulateme").innerHTML = changedtext;
 }
 
 function changeimage() {
 var url = document.getElementById("imgurl").value;
-if (url === null) {
-url = 'https://images.pexels.com/photos/127028/pexels-photo-127028.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
-}
 document.getElementById("changeme").src = url;
 };
-
-function saveinputs() {
-localstorage.setItem();
-}
-
-function getsavedinputs() {
-//if localstorage
-localstorage.getItem();
-}
-
-function cleatinputs() {
-localstorage.clear();
-}
 
 function overwrite() {
 document.write('<button onclick="reload()">Reload Page</button><br><br>');
@@ -54,6 +38,32 @@ document.write('<button onclick="reload()">Reload Page</button><br><br>');
 
 function reload() {
 location.reload();
+}
+
+function randomfont() {
+//randomize up to 92, style either needs PX or %, % is easier on the eyes
+var fontchange = Number(Math.floor(Math.random() * (92)) + 1);
+document.getElementById("page").style.fontSize = fontchange + "%";
+}
+
+function randomfontstyle() {
+var styles = ['normal', 'italic', 'oblique'];
+var styletype = styles[Number(Math.floor(Math.random() * (styles.length)))];
+while (styletype === currentstyle){
+styletype = styles[Number(Math.floor(Math.random() * (styles.length)))];
+}
+document.getElementById("page").style.fontStyle = styletype;
+currentstyle = styletype;
+}
+
+function randomfontfamily() {
+var fonts = ['Abel', 'Actor', 'Fantasy' , 'American Typewriter' , 'Snell Roundhand,' , 'cursive' , 'serif', 'sans-serif', 'system-ui'];
+var fonttype = fonts[Number(Math.floor(Math.random() * (fonts.length)))];
+while (fonttype === currentfontfamily){
+fonttype = fonts[Number(Math.floor(Math.random() * (fonts.length)))];
+}
+document.getElementById("page").style.fontFamily = fonttype;
+currentfontfamily = fonttype;
 }
 </script>
 
