@@ -28,7 +28,10 @@ function changetext() {
 }
 
 function changeimage() {
-var url = value.toString(document.getElementById("imgurl"));
+var url = document.getElementById("imgurl").value;
+if (url === null) {
+url = 'https://images.pexels.com/photos/127028/pexels-photo-127028.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
+}
 document.getElementById("changeme").src = url;
 };
 
