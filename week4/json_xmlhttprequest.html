@@ -7,12 +7,14 @@
 <h1>XMLhttpRequest!</h1>
 <p id="time"></p>
 <p id="conditions"></p>
+<p id ="test"></p>
 <button onclick="getbandconditions()">Get Band Conditions</button><br>
 Explanation: I am into ham radio, and it is important to know which radio bands have the most favorable conditions. http://www.hamqsl.com/solar.html 
 <br>
 Disclaimer: I was not able to implement this in a way I wanted due to same domain policy. I copied an XML file from the orgianl site. In order to do this as desired, I would use a web scraper and JQuery.
 <script>
 function getbandconditions() {
+//npm install --save request-promise cheerio puppeteer
 var link = "https://baldwin-casey.github.io/cit261/week4/solarxml.xml";
 var httpreq = new XMLHttpRequest();
 httpreq.onreadystatechange = function() {
@@ -28,6 +30,16 @@ document.getElementById("conditions").innerHTML += "<p>The 12 and 10 Meter bands
 httpreq.open('GET', link, true);
 httpreq.send();
 }
+
+fetch(websiteUrl).then((res) => {
+  res.text().then((htmlTxt) => {
+    var domParser = new DOMParser()
+    let doc = domParser.parseFromString(htmlTxt, 'text/html')
+    var feedUrl = doc.querySelector('link[type="application/rss+xml"]').href
+	document.getElementById("test").innerHTML = "";
+  })
+}).catch(() => console.error('Error in fetching the website'))
+
 </script>
 
 </body>

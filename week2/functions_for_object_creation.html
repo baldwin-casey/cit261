@@ -18,13 +18,13 @@ This page is devoid of parties and parrots, Choose a parrot to start this party!
   <option value="Flapping">Flapping</option>
   <option value="Squaking">Squaking</option>
   <option value="Head-Banging">Head-Banging</option>
-</select><br>
+</select><br><br>
 <select id="color">
   <option value="Blue">Blue</option>
   <option value="Green">Green</option>
   <option value="Red">Red</option>
   <option value="Multi-Colored">Multi-Colored</option>
-</select><br>
+</select><br><br>
 <select id="name">
   <option value="Polly">Polly</option>
   <option value="Jack">Jack</option>
@@ -41,9 +41,11 @@ Hit the button for even more parrots! (The parrot gif is a random parrot)<br>
 
 Too much awesome, stop the music!<br>
 <button onclick="stopparty()">Stop The Party</button><br><br>
-Explanation: The parrot object is created once the party button is hit. This parrot has three attributes, name, color and it's action. Each time you press the button, it creates a new object with the specified attributes.
+Explanation: The parrot object is created once the party button is hit. This parrot has three attributes, name, color and it's action. There is also a function inside each parrot object to compile the attributes. Each time you press the button, it creates a new object with the specified attributes. Music is royalty free music.
 <br>
 <script>
+//Just so the parrot number is displayed correctly
+var parrotcounter = 0;
 var parrots = [
 '<div style="width:10%;height:0;padding-bottom:10%;position:relative;"><iframe src="https://giphy.com/embed/l3q2zVr6cu95nF6O4" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/producthunt-party-parrot-parrots-l3q2zVr6cu95nF6O4">via GIPHY</a></p>'
 ,
@@ -70,20 +72,30 @@ document.getElementById("partyAudio").play();
 var actioninput = document.getElementById("action").value;
 var colorinput = document.getElementById("color").value;
 var parrotname = document.getElementById("name").value;
-var parrot = {
-  parrotAction: actioninput,
-  parrotName: parrotname,
-  parrotColor : colorinput,
-  partyTime : function() {
+
+
+function parrot(action, name, color) {
+  this.parrotAction = action;
+  this.parrotName = name;
+  this.parrotColor = color;
+  //WHOA WE GOT 3 FUNCTION UP IN HERE! A FUNCTION WITHIN A FUNCTION WHILE INSIDE ANOTHER FUNCTION!
+  this.partyTime = function() {
     return this.parrotAction + " " + this.parrotColor + " " + this.parrotName + " thinks it's time to party!";
   }
 };
-document.getElementById("partyarea").innerHTML += "<p>" + parrots[parrotnumber] + parrot.partyTime() + "</p>";
+var currentparrot = new parrot(actioninput, colorinput, parrotname);
+//So it displays the correct parrot number
+parrotcounter = parrotcounter + 1;
+//This line displays the gif and the properties of the new parrot object.
+document.getElementById("partyarea").innerHTML += '<div style="border: 2px solid black"><p> Parrot Number:' + parrotcounter + " " + parrots[parrotnumber] + currentparrot.partyTime() + "</p></div>";
 }
 
 function stopparty() {
+//reset the parrot number and clear the display.
+parrotcounter = 0;
 document.getElementById("partyAudio").pause();
 document.getElementById("partyarea").innerHTML = "";
+
 }
 </script>
 <br>
