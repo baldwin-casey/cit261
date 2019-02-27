@@ -2,13 +2,48 @@
 <html>
 <head>
 <link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
+<style>div {background-color: #ADD8E6;}
+</style>
 </head>
 
 <body>
 <h1>HTML5 Media</h1>
 <br>
+<div>
+Want to hear a computer attempt to beatbox?<br>
 <button onclick="bootsandcats()">BEATBOX!</button><br><br>
-<button onclick="stopbootsandcats()">STOP THE BEATBOX!</button><br><br>
+<button onclick="stopbootsandcats()">MAKE IT STOP!</button><br><br>
+
+Explanation: Speech synthesis is built into HTML5, and has many options like speed and volume. This speech synthesis is repeating 'boots and cats' 10 times.<br><br>
+<br><br>
+Put some words here<br>
+<input type="text" id="inputspeechtext"></input><br>
+Speed of Speech(1-100)<br>
+<input type="number" id="inputrate"></input><br>
+Volume of Speech(1-100)<br>
+<input type="number" id="inputvolume"></input><br>
+<button onclick="speakthings()">Speak</button><br><br>
+<button onclick="stopbootsandcats()">MAKE IT STOP!</button><br>
+Explanation: This is similar to boots and cats above, except the user inputs change the rate and volume of the voice.
+</div>
+<br><br>
+<div><br>
+This video was recorded by Chris Hadfield, commander of the ISS. This is the first and only music video recorded in space.<br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/KaOC9danxNo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>
+Explanation: Youtube is a very large source of videos that can be used. The only way to use youtube is to use an iframe and an imbeded link.
+</div>
+<br><br><br>
+<div>
+This is a quick demo of my ham radio APRS packet station.<br>
+<video id="aprs" width="560" height="315">
+<source src="aprs_xastir_demo.mp4" type="video/mp4">
+</video><br>
+<button onclick="videocontrol()">Add Video Controls</button>
+<button onclick="novideocontrol()">Remove Video Controls</button><br><br>
+<button id="playbutton" onclick="playvideo()">Play Video</button>
+<button id="pausebutton" onclick="pausevideo()">Pause Video</button><br><br>
+Explanation: This is a simple video player that can be manipulated with a little code. This video is not on youtube, it is found locally on the web server.
+</div>
 <script>
 var speech;
 var msg;
@@ -32,13 +67,41 @@ speech = window.speechSynthesis.speak(msg);
 function stopbootsandcats() {
 speechsynth.cancel();
 }
+
+function speakthings() {
+//very similar to above, minus the extra user options.
+var userinput = document.getElementById("inputspeechtext").value;
+//rate is .1-10, so / 10 gives the user 1-100 while volume is 0-1, so / 100 gives the user 1-100. I just cant think of a better way to explain it, except that it works.
+var inputrate = document.getElementById("inputrate").value / 10;
+var inputvolume = document.getElementById("inputvolume").value / 100;
+speechsynth = window.speechSynthesis;
+msg = new SpeechSynthesisUtterance(userinput);
+msg.rate = inputrate;
+msg.volume = inputvolume;
+speech = window.speechSynthesis.speak(msg);
+}
+
+function videocontrol() {
+var video = document.getElementById("aprs");
+video.controls = true;
+}
+
+function novideocontrol() {
+var video = document.getElementById("aprs");
+video.controls = false;
+}
+
+function pausevideo() {
+var video = document.getElementById("aprs");
+video.pause();
+}
+
+function playvideo() {
+var video = document.getElementById("aprs");
+video.play();
+}
 </script>
-Explanation: Speech synthesis is built into HTML5, and has many options.<br><br>
-This video was recorded by Chris Hadfield, commander of the ISS. This is the first and only music video recorded in space.<br>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/KaOC9danxNo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
+<br>
 <footer>
 <a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
 </footer>
