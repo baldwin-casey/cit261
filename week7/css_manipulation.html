@@ -2,6 +2,16 @@
 <head>
 <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
 <style>
+body {
+padding: 0;
+margin: 0 auto;
+height : 100%;
+}
+
+div {
+display: block;
+}
+
 ul {
   list-style-type: none;
   margin: 0;
@@ -29,40 +39,87 @@ li a:hover {
   color: white;
 }
 
+content {
+height: 100%;
+}
+
  </style>
 </head>
 <body>
 <div class="navbar">
 <ul>
-  <li><a onclick="vertical()">Change to Vertical Bar</a></li>
-  <li><a onclick="horizontal()">Change to Horizontal Bar</a></li>
-  <li><a onclick="color()">Change Bar Color</a></li>
-  <li><a onclick="size()">Change Bar Size</a></li>
+  <li><a onclick="vertical()" class="listbutton">Change to Vertical Bar</a></li>
+  <li><a onclick="horizontal()" class="listbutton">Change to Horizontal Bar</a></li>
+  <li><a onclick="pagecolor()" class="listbutton">Change Page Color</a></li>
+  <li><a onclick="color()" class="listbutton">Change Bar Color</a></li>
 </ul>
 </div>
+<div id="content">
 Navbar design from W3 schools
-<div class="display">
-</div>
 
+<p>Here is some content!</p>
 <script>
 function vertical() {
-
+var content = document.getElementById("content");
+var ul = document.querySelector("ul");
+var lia = document.getElementsByClassName("listbutton");
+var li = document.querySelector("li");
+content.style.marginLeft = "20%";
+ul.style.display = "block";
+ul.style.width = "15%";
+ul.style.position = "fixed";
+ul.style.height = "100%";
+ul.style.overflow = "none";
+ul.style.backgroundColor = "blue";
+var x;
+for (x = 0; x < lia.length; x++) {
+lia[x].style.textAlign = "left"; 
+lia[x].style.width = "100%"
+}
 }
 
 function horizontal() {
-
+var ul = document.querySelector("ul");
+var lia = document.getElementsByClassName("listbutton");
+var li = document.querySelector("li");
+var content = document.getElementById("content");
+content.style.marginLeft = "0%";
+ul.style.overflow = "hidden";
+li.style.float = "left";
+ul.style.width = "100%";
+ul.style.height = "5%";
+//ul.style.position = "fixed";
+ul.style.backgroundColor = "#f1f1f1";
+ul.style.margin = "0";
+ul.style.padding = "0";
+var x;
+for (x = 0; x < lia.length; x++) {
+lia[x].style.textAlign = "left"; 
+lia[x].style.padding = "8px 16px";
+}
 }
 
 function color() {
-
+var ul = document.querySelector("ul");
+//There is no way I figured this out on my own, this is from sitepoint. It generates a random color.
+var newcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+ul.style.backgroundColor = newcolor;
+//This line was for testing, because the output was really neat.
+//console.log(newcolor);
 }
 
-function size() {
-
+function pagecolor() {
+ var content = document.getElementById("content");
+ var newcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+ content.style.backgroundColor = newcolor;
+ 
 }
+
+
 </script>
 <footer>
 <a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
 </footer>
+</div>
 </body>
 </html>
