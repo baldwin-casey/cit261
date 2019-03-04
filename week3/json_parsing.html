@@ -5,20 +5,92 @@
 </head>
 <body>
 <h1>JSON Parsing And Stringify!</h1>
+Input The Details.<br>
+Name:
+<input type="text" id="name"><br>
+Age:  
+<input type="number" id="age"><br>
+City:  
+<input type="text" id="city"><br>
+EyeColor:
+<input type="text" id="color"><br>
+Food: 
+<input type="text" id="food"><br>
+<button onclick="createobject()">Create The Object!</button><br><br>
+<button hidden id="saveprofile" onclick="saveprofile()">Save The Object!</button><br><br>
+<button hidden id="loadprofile" onclick="loadprofile()">Load The Object!</button><br><br>
+<button onclick="clearprofile()">Clear The Object!</button><br><br>
 <p id="string"></p>
 <p id="JSON"></p>
 <p id="JSONContents"></p>
+<p id="test"></p>
 
 <script>
-var obj = { name: "Casey", age: 26, city: "Rexburg", favfood: "Steak", eyecolor: "Blue"};
+if (localStorage.getItem('profile') === null){
+document.getElementById("loadprofile").style.visibility = 'hidden';
+}
+else {
+document.getElementById("loadprofile").style.visibility = 'visible';
+}
+
+var myString;
+var myJSON;
+var obj;
+
+function saveprofile() {
+localStorage.setItem('obj', JSON.stringify(obj));
+document.getElementById("loadprofile").style.visibility = 'visible';
+document.getElementById("test").innerHTML = localStorage.getItem('obj');
+console.log('retrievedObject: ', localStorage.getItem('obj'));
+}
+
+function loadprofile() {
+var temp = localStorage.getItem('profile');
+//myJSON = JSON.parse(myString);
+//var person = JSON.parse(myString);
+//person = new obj(inputname, inputage, inputcity, inputeyecolor, inputfood);
+document.getElementById("test").innerHTML = JSON.parse(temp);
+//display();
+}
+
+function clearprofile() {
+localStorage.removeItem("profile");
+}
+
+
+
+function createobject() {
+var obj = {
+name: document.getElementById("name").value,
+age: document.getElementById("age").value,
+city: document.getElementById("city").value,
+eyecolor: document.getElementById("color").value,
+food: document.getElementById("food").value,
+contents: function() {
+return this.name + " " + this.age + " " + this. city + " " + this.eyecolor + " " + this.food;
+}
+}
 var myString = JSON.stringify(obj);
 var myJSON = JSON.parse(myString);
-document.getElementById("string").innerHTML = "The raw data is: <b>" + myString + "</b>";
+//Clear display for new object
+document.getElementById("string").innerHTML = "";
+document.getElementById("JSON").innerHTML = "";
+document.getElementById("JSONContents").innerHTML = "";
+//Display new object
+document.getElementById("string").innerHTML = "The raw data is: <b>" + myString + "</b> <br>The function inside the object returns the contents of the object, which are: " + obj.contents();
 document.getElementById("JSON").innerHTML = "The original object and the parsed JSON is: <b>" + myJSON + "</b> This is normal, as this is an object.";
-document.getElementById("JSONContents").innerHTML = "The contents of the object are: <b>" + myJSON.name + ", is " + myJSON.age + " years old, is from " + myJSON.city + " has " + myJSON.eyecolor + " eyes, and favorite food is " + myJSON.favfood + "</b>";
+document.getElementById("JSONContents").innerHTML = "The readable contents of the object are: <b>" + myJSON.name + ", is " + myJSON.age + " years old, is from " + myJSON.city + " has " + myJSON.eyecolor + " eyes, and favorite food is " + myJSON.food + "</b>";
+document.getElementById("saveprofile").hidden = false;
+}
+
+function display(){
+document.getElementById("string").innerHTML = "The raw data is: <b>" + myString + "</b> <br>The function inside the object returns the contents of the object, which are:";
+document.getElementById("JSON").innerHTML = "The original object and the parsed JSON is: <b>" + myJSON + "</b> This is normal, as this is an object.";
+document.getElementById("JSONContents").innerHTML = "The readable contents of the object are: <b>" + myJSON.name + ", is " + myJSON.age + " years old, is from " + myJSON.city + " has " + myJSON.eyecolor + " eyes, and favorite food is " + myJSON.food + "</b>";
+}
 </script>
 
-Explanation: Why parse and stringify? This is all about converting from an object to a string and back. This is so a server can process the information. A server can not process an object, but it can process a string. FUNCTIONS DO NOT TRANSLATE INTO A STRING. SO JUST DON'T.<br>
+Explanation: Why parse and stringify? This is all about converting from an object to a string and back. This is so a server can process the information. A server can not process an object, but it can process a string. <br>
 <br>
 <footer>
 <a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
