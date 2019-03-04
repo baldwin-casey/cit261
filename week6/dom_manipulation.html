@@ -3,49 +3,68 @@
 <head>
 <link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
 </head>
-<body>
+<body id="page">
 <h1>Manipulate the DOM!</h1>
-You will write a quiz game which will be stored in localstorage which you can save and recall for later.
-<select>
-<option id="1"
+<p id="manipulateme">Modify this line of text.</p>
+<input type="text" id="newtext" value="Enter New Text Here."><br>
+<button onclick="changetext()">Change the text</button><br><br><br>
+<img id="changeme" src="https://www.catster.com/wp-content/uploads/2017/10/A-kitten-meowing-with-his-mouth-open.jpg" width="50" height="50"></img><br>
+<input type="text" id="imgurl"><br>
+<button onclick="changeimage()">Change The Image</button>--Paste any image URL<br><br>
+<button onclick="randomfont()">Change The Page Font Size</button><br><br>
+<button onclick="randomfontstyle()">Change the Page Font Style</button><br><br>
+<button onclick="randomfontfamily()">Change the Page Font</button><br><br>
 
-<div id="entry">
-
-</div>
-Quiz Game
-<div id="game">
-<div id="question">
-</div>
-<div id="options">
-<div id="option1">
-</div>
-<div id="option2">
-</div>
-<div id="option3">
-</div>
-<button id="Answer">Submit Answer</button>
-<div id="option4">
-</div>
-</div> 
-</div>
-<div id="result">
-</div>
-Explanation: 
+<button onclick="overwrite()" style="background-color: #f44336;">Overwrite Page</button><br><br>
+Explanation: Each of these buttons manipulates a part of the page, each in their own way. 
 <script>
-var gamecontent = {
-;
-function gameover() {
-if (gameresult == win) {
-Correct!
-}
-else { 
-Incorrect!
-}
+//so the variable is not lost when the function ends.
+var currentstyle = 'normal';
+var currentfontfamily = ''
+
+function changetext() {
+var changedtext = document.getElementById("newtext").value;
+document.getElementById("manipulateme").innerHTML = changedtext;
 }
 
-function loadgame() {} 
+function changeimage() {
+var url = document.getElementById("imgurl").value;
+document.getElementById("changeme").src = url;
+};
 
+function overwrite() {
+document.write('<button onclick="reload()">Reload Page</button><br><br>');
+}
 
+function reload() {
+location.reload();
+}
+
+function randomfont() {
+//randomize up to 92, style either needs PX or %, % is easier on the eyes
+var fontchange = Number(Math.floor(Math.random() * (92)) + 1);
+document.getElementById("page").style.fontSize = fontchange + "%";
+}
+
+function randomfontstyle() {
+var styles = ['normal', 'italic', 'oblique'];
+var styletype = styles[Number(Math.floor(Math.random() * (styles.length)))];
+while (styletype === currentstyle){
+styletype = styles[Number(Math.floor(Math.random() * (styles.length)))];
+}
+document.getElementById("page").style.fontStyle = styletype;
+currentstyle = styletype;
+}
+
+function randomfontfamily() {
+var fonts = ['Abel', 'Actor', 'Fantasy' , 'American Typewriter' , 'Snell Roundhand,' , 'cursive' , 'serif', 'sans-serif', 'system-ui'];
+var fonttype = fonts[Number(Math.floor(Math.random() * (fonts.length)))];
+while (fonttype === currentfontfamily){
+fonttype = fonts[Number(Math.floor(Math.random() * (fonts.length)))];
+}
+document.getElementById("page").style.fontFamily = fonttype;
+currentfontfamily = fonttype;
+}
 </script>
 
 <footer>
