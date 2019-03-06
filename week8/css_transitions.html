@@ -2,11 +2,81 @@
 <html>
 <head>
 <link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
+<style>
+#container {
+height: 500px;
+width: 200px;
+background: grey;
+position: relative;
+}
+
+#liquid {
+position: absolute;
+height: 10px;
+width: 200px;
+background: blue;
+bottom: 0;
+transition: height 2s;
+}
+
+#liquid:hover{
+height: 500px;
+} 
+</style>
 </head>
-<body>
+<body onload="setbucket()">
 <h1>CSS Transitions!</h1>
-
+<h2>Mouse over the liquid to fill the container!</h2>
+<div><img id="bucket" src="bucket.jpg" width="75" height="75"></img>
+</div>
+<div id="box">
+<div id="container" >
+<div id="liquid" onmouseover="changebucket()" onmouseout="changebucketback()">
+</div>
+</div>
+</div>
+<p id="info">The transition speed is 5 seconds.</p>
+<input type="number" id="transitionspeed"></input><br>
+<button onclick="containerfill()">Change how many seconds it takes to fill the container</button><br><br>
+<button onclick="liquidcolor()">Change the color of the liquid</button><br><br>
+<button onclick="containercolor()">Change the color of the container</button><br><br>
+<input type="number" id="newcontainersize"></input><br>
+<button onclick="containersize()">Change the width of the container</button><br>
+Explanation: The grey box/container is a div. The blue box/liquid is also a div that is displayed ontop of the container, giving it the appearance of filling the container. When the mouse moves over the liquid, it transforms the bucket picture and starts the transition of 'filling' the container.
 <script>
+function containerfill() {
+var speed = document.getElementById("transitionspeed").value;
+document.getElementById("liquid").style.transitionDuration = speed + "s";
+console.log(speed);
+document.getElementById("info").innerHTML = "The transition speed is " + speed + " seconds long.";
+}
 
+function liquidcolor() {
+var newcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+document.getElementById("liquid").style.backgroundColor = newcolor;
+}
+
+function containercolor() {
+var newcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+document.getElementById("container").style.backgroundColor = newcolor;
+}
+
+function containersize() {
+var newsize = document.getElementById("newcontainersize").value + "px";
+document.getElementById("container").style.width = newsize;
+document.getElementById("liquid").style.width = newsize;
+}
+
+function changebucket() {
+document.getElementById("bucket").style.transform = "rotate(-45deg)";
+}
+
+function changebucketback() {
+document.getElementById("bucket").style.transform = "rotate(45deg)";
+}
+
+function setbucket() {
+document.getElementById("bucket").style.transform = "rotate(45deg)";
+}
 </script>
 </body>
