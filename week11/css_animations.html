@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
+<style>
+@keyframes shipmovement {
+from {transform: rotateZ(-3deg) translate(0, 0) scaleX(-1);}
+to {transform: rotateZ(3deg) translate(10px, 40px) scaleX(-1);}
+}
+
+@keyframes pirateshipmovement {
+from {transform: rotateZ(3deg) translate(0, 0);}
+to {transform: rotateZ(-3deg) translate(10px, 40px);}
+}
+
+@-webkit-keyframes shipmovement {
+from {transform: rotateZ(-3deg) translate(0, 0) scaleX(-1);}
+to {transform: rotateZ(3deg) translate(10px, 40px) scaleX(-1);}
+}
+
+@-webkit-keyframes pirateshipmovement {
+from {transform: rotateZ(3deg) translate(0, 0);}
+to {transform: rotateZ(-3deg) translate(10px, 40px);}
+}
+
+
+/*Copied from W3 schools to save time. Just a simple shake. */
+@keyframes cannonhit {
+0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+
+@-webkit-keyframes cannonhit {
+0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+#container {
+display: block;
+width: 100%;
+}
+
+#ocean {
+z-index: 0;
+position: relative;
+}
+
+#water {
+background-color: blue;
+position: relative;
+width: 100%;
+z-index: 5;
+height: 200px;
+bottom: 0;
+margin-top: -85px;
+}
+
+
+#playership {
+animation-name: shipmovement;
+animation-duration: 6s;
+animation-direction: alternate;
+animation-timing-function: ease;
+animation-iteration-count: infinite;
+bottom: 0;
+display: inline-block;
+position: relative;
+z-index: -1;
+}
+
+#pirateship {
+animation-name: pirateshipmovement;
+animation-duration: 5s;
+animation-direction: alternate;
+animation-timing-function: ease;
+animation-iteration-count: infinite;
+animation-delay: -.5s;
+bottom: 0;
+display: inline-block;
+float: right;
+position: relative;
+z-index: -1;
+}
+
+</style>
+</head>
+<body>
+<h1>CSS Animations!</h1>
+Your ship is under attack! Fire on the pirate ship!
+
+<div id="container">
+<div id="ocean">
+
+<div id="playership">
+<img src="ship.jpg"/>
+</div>
+
+<div id="pirateship">
+<img src="ship.jpg"/>
+</div>
+</div>
+<div id="water">
+</div>
+</div>
+<br><br><br><br>
+<div style="display: block;">
+<button onclick="fireonpirateship()">Fire Cannons!</button>
+
+<script>
+function fireonpirateship() {
+var pirateship = document.getElementById("pirateship");
+pirateship.style.animationName = "cannonhit";
+pirateship.style.WebkietanimationName = "cannonhit";
+pirateship.style.animationDuration = ".5s"
+//go back to the original animation after 1 second
+setTimeout(function(){ 
+pirateship.style.animationDuration = "5s"
+pirateship.style.WebkietanimationName = "pirateshipmovement"; 
+pirateship.style.animationName = "pirateshipmovement";}, 
+800);
+}
+</script>
+Explanation: There are multiple divs, one that contains everything, one for each ship and one that is the water. The ships are on a loop of animation that rotate slightly and move up and down. When the fire cannons button is pushed, the enemy ship has different set of anuimations that 'shakes' it. After that time, it goes back to the original animation. The div that is colored blue is using a diffreent z index to be placed on top of the other divs, giving it the appearance of water.
+<br>
+<footer>
+<a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
+</footer>
+</div>
+</body>
