@@ -3,40 +3,58 @@
 <head>
 <link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
 <style>
-#ocean {
-display: block;
-border-bottom: solid blue 50px;
-}
-
-#playership {
-display: inline-block;
-rotateZ(10deg);
-}
-
-#pirateship {
-display: inline-block;
-float: right;
-}
+#messwithme {
+background-color: blue;
+color: red;
+height: 40%;
+width: 20%;
+text-align: center;
+}1
 </style>
 </head>
 <body>
 <h1>CSS Transforms!</h1>
-Your ship is under attack! Fire on the pirate ship!
 
-<div id="ocean">
-<div id="playership">
-<img src="https://www.handcraftedmodelships.com//pictures/big/flying-dutchman-pirate-ship-model-ghost-ship11.jpg"/>
-</div>
 
-<div id="pirateship">
-<img src="https://www.handcraftedmodelships.com//pictures/big/flying-dutchman-pirate-ship-model-ghost-ship11.jpg"/>
-</div>
-</div>
+<div id="messwithme">
+<h3>Mess with me!</h3>
+</div><br>
+<select id="transformproperty">
+<option value="rotate">Rotate</option>
+<option value="skewX">Skew X</option>
+<option value="skewY">Skew Y</option>
+<option value="skewZ">Skew Z</option>
+<option value="scaleX">Scale X</option>
+<option value="scaleY">Scale Y</option>
+<option value="scaleZ">Scale Z</option>
+<option value="rotateX">Rotate X</option>
+<option value="rotateY">Rotate Y</option>
+<option value="rotateZ">Rotate Z</option>
+</select><br><br>
+<input type="number" id="transformnumber"> - Enter a number, any number will do.<br><br>
+<button onclick="weee()">Manipulate</button><br>
+
+
 
 <script>
+function weee() {
+var property = document.getElementById("transformproperty").value;
+var degree = document.getElementById("transformnumber").value;
+//Why this if statement? Because some of the transforms need deg while others(scale) do not. This filters them so they display properly. Even if Z doesnt work quite right. Something about incompatible dimensions.
+if (property === 'scaleY' || property === 'scaleX' || property === 'scaleZ')
+{
+document.getElementById("messwithme").style.transform = property + "(" + degree + ")";
+console.log(property + "(" + degree + ")");
+}
+else {
+document.getElementById("messwithme").style.transform = property + "(" + degree + "deg)";
+console.log(property + "(" + degree + "deg)");
+}
+}
 </script>
-Explanation:
+Explanation: The dropdown has each of the values which is grabbed by the function and given to the div as its style. Refresh the page if the div covers the options.
 <br>
 <footer>
 <a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a>
 </footer>
+</html>
