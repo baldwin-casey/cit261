@@ -2,12 +2,22 @@
 <head>
 <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
 <style>
+div.info {
+padding: 8px;
+border: dashed 2px;
+border-style: rounded;
+}
+div.buttons {
+padding: 8px;
+border: dashed 2px;
+}
 </style>
 </head>
 <body>
 <div class="display">
 <div class="info">
 <h1>Taipan</h1>
+</div>
 <div class="buttons">
 Please enter select an option:
 <button onclick="newgame()">New Game</button>
@@ -15,8 +25,8 @@ Please enter select an option:
 <button onclick="aboutgame()">About Game</button>
 </div>
 </div>
-</div>
 <script>
+//Here are the global variables that the game manipulates
 var date;
 var name;
 var currentlocation;
@@ -32,6 +42,8 @@ var silk;
 var blackmarketcargo;
 var mute;
 var towndisplay = "Welcome to " + currentlocation + "!"
+//Here is the first page and it's contents.
+document.getElementsByClassName("info")[0].innerHTML = "Click an option to begin!"
 
 //here are the functions from the first page
 function newgame() {
@@ -45,8 +57,8 @@ generalcargo = 0;
 arms = 0;
 silk = 0;
 blackmarketcargo = 0;
-document.getElementsbyClass("display").innerHTML = towndisplay;
-document.getElementsbyClass("info").innerHTML = date;
+document.getElementsByClassName("display")[0].innerHTML = "Welcome to " + currentlocation + "!";
+document.getElementsByClassName("info")[0].innerHTML = "Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition;
 }
 
 function loadgame() {
@@ -72,9 +84,10 @@ document.getElementsbyClass("info").innerHTML = "Cash: " + cash + "<br>Bank: " +
 }
 }
 function aboutgame() {
-document.getElementsbyClass("info") = "Taipan was orginally released in 1982 for the TRS80 and Apple 2. ";
+document.getElementsByClassName("info")[0].innerHTML = "Taipan was orginally released in 1982 for the TRS80 and Apple 2. <br><button onclick='returnmain()'>Return to main game</button>";
 }
 
+//Here are the options for each city view
 function savegame() {
 localStorage.setItem("name", name);
 localStorage.setItem("date", date);
@@ -91,10 +104,10 @@ localStorage.setItem("silk", silk);
 localStorage.setItem("blackmarketcargo", blackmarketcargo);
 }
 
-function  {
-
+function returnmain() {
+document.getElementsByClassName("info")[0].innerHTML = "Click an option to begin!"
 }
-//here are the 
+
 </script>
 
 <footer>
