@@ -6,18 +6,23 @@
 </head>
 <body>
 <div class="display">
-Taipan
+<div class="info">
+<h1>Taipan</h1>
+<div class="buttons">
 Please enter select an option:
-
-<button onclick="">New GAME</button>
-<button onclick="">Load Game</button>
-<button onclick="">About Game</button>
+<button onclick="newgame()">New Game</button>
+<button onclick="loadgame()">Load Game</button>
+<button onclick="aboutgame()">About Game</button>
+</div>
+</div>
+</div>
 <script>
 var date;
 var name;
 var currentlocation;
 var debt;
 var cash;
+var bank;
 var shipsize;
 var shipcondition;
 var cannons;
@@ -26,9 +31,72 @@ var arms;
 var silk;
 var blackmarketcargo;
 var mute;
+var towndisplay = "Welcome to " + currentlocation + "!"
 
+//here are the functions from the first page
+function newgame() {
+date = new Date('January 1745');
+currentlocation = 'Beijieng';
+console.log(date);
+shipsize = 100;
+shipcondition = 100;
+cannons = 5;
+generalcargo = 0;
+arms = 0;
+silk = 0;
+blackmarketcargo = 0;
+document.getElementsbyClass("display").innerHTML = towndisplay;
+document.getElementsbyClass("info").innerHTML = date;
+}
+
+function loadgame() {
+if (localStorage.getItem("name") === null) {
+console.log('No saved game found!');
+}
+else {
+name = localStorage.getItem("name");
+date = localStorage.getItem("date");
+currentlocation = localStorage.getItem("currentlocation");
+debt = localStorage.getItem("debt");
+cash = localStorage.getItem("cash");
+bank = localStorage.getItem("bank");
+shipsize = localStorage.getItem("shipsize");
+shipcondition = localStorage.getItem("shipcondition");
+cannons = localStorage.getItem("cannons");
+generalcargo = localStorage.getItem("generalcargo");
+arms = localStorage.getItem("arms");
+silk = localStorage.getItem("silk");
+blackmarketcargo = localStorage.getItem("blackmarketcargo");
+document.getElementsbyClass("display").innerHTML = towndisplay;
+document.getElementsbyClass("info").innerHTML = "Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition;
+}
+}
+function aboutgame() {
+document.getElementsbyClass("info") = "Taipan was orginally released in 1982 for the TRS80 and Apple 2. ";
+}
+
+function savegame() {
+localStorage.setItem("name", name);
+localStorage.setItem("date", date);
+localStorage.setItem("currentlocation", currentlocation);
+localStorage.setItem("debt", debt);
+localStorage.setItem("cash", cash);
+localStorage.setItem("bank", bank);
+localStorage.setItem("shipsize", shipsize);
+localStorage.setItem("shipcondition", shipcondition);
+localStorage.setItem("cannons", cannons);
+localStorage.setItem("generalcargo", generalcargo);
+localStorage.setItem("arms", arms);
+localStorage.setItem("silk", silk);
+localStorage.setItem("blackmarketcargo", blackmarketcargo);
+}
+
+function  {
+
+}
+//here are the 
 </script>
-</div>
+
 <footer>
 <a href="https://baldwin-casey.github.io/cit261/">RETURN HOME </a> - THIS GAME WAS MADE FOR EDUCATIONAL BENEFIT, NO COPYRIGHT INFRINGEMENT INTENDED
 </footer>
