@@ -17,6 +17,7 @@ border: dashed 2px;
 <div class="display">
 <div class="info">
 <h1>Taipan</h1>
+<p>Select an option to begin!</p>
 </div>
 <div class="buttons">
 Please enter select an option:
@@ -41,29 +42,34 @@ var arms;
 var silk;
 var blackmarketcargo;
 var mute;
-var towndisplay = "Welcome to " + currentlocation + "!"
-//Here is the first page and it's contents.
-document.getElementsByClassName("info")[0].innerHTML = "Click an option to begin!"
+var generalcargoprice = 5;
+var armsprice = 30;
+var silkprice = 500;
+var blackmarketcargoprice = 6000;
+var itemvalue;
+var itemselected;
 
 //here are the functions from the first page
 function newgame() {
 date = new Date('January 1745');
-currentlocation = 'Beijieng';
+currentlocation = 'Beijing';
 console.log(date);
 shipsize = 100;
 shipcondition = 100;
 cannons = 5;
+bank = 0;
 generalcargo = 0;
 arms = 0;
 silk = 0;
 blackmarketcargo = 0;
-document.getElementsByClassName("display")[0].innerHTML = "Welcome to " + currentlocation + "!";
-document.getElementsByClassName("info")[0].innerHTML = "Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition;
+document.getElementsByClassName("info")[0].innerHTML = "Do you want to start with money and debt or no debt and no money?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="startwithdebt()"> Start with Debt</button><br> <button onclick="startwithoutdebt()">Start Without Debt</button>';
 }
+
 
 function loadgame() {
 if (localStorage.getItem("name") === null) {
-console.log('No saved game found!');
+document.getElementsByClassName("info").innerHTML = ('No saved game found!<br>Please select a different option');
 }
 else {
 name = localStorage.getItem("name");
@@ -79,12 +85,25 @@ generalcargo = localStorage.getItem("generalcargo");
 arms = localStorage.getItem("arms");
 silk = localStorage.getItem("silk");
 blackmarketcargo = localStorage.getItem("blackmarketcargo");
-document.getElementsbyClass("display").innerHTML = towndisplay;
-document.getElementsbyClass("info").innerHTML = "Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition;
+display();
 }
 }
+
 function aboutgame() {
 document.getElementsByClassName("info")[0].innerHTML = "Taipan was orginally released in 1982 for the TRS80 and Apple 2. <br><button onclick='returnmain()'>Return to main game</button>";
+}
+
+//Starting with or without debt
+function startwithdebt() {
+cash = 3000;
+debt = 3000;
+display();
+}
+
+function startwithoutdebt() {
+cash = 0;
+debt = 0;
+display();
 }
 
 //Here are the options for each city view
@@ -105,8 +124,178 @@ localStorage.setItem("blackmarketcargo", blackmarketcargo);
 }
 
 function returnmain() {
-document.getElementsByClassName("info")[0].innerHTML = "Click an option to begin!"
+document.getElementsByClassName("info")[0].innerHTML = "<h1>Taipan</h1><p>Click an option to begin!</p>"
 }
+
+//This refreshes the main display for the game, which allows you to buy, sell or bank goods.
+function display() {
+document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="buy()"> Buy Goods</button><br> <button onclick="sell()">Sell Goods</button><br> <button onclick="visitbank()">Visit The Bank</button><br> <button onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button>';
+}
+
+function visitbank() {
+document.getElementsByClassName("info")[0].innerHTML = "Welcome to the bank!<br> How much would you like to deposit?"
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="bankdeposit"> Max ' + cash + '<br><button onclick="depositcash()">Confirm</button> <button onclick="display()">Cancel</button>';
+
+}
+
+function depositcash() {
+bank = parseInt(document.getElementById("bankdeposit").value);
+cash = cash - parseInt(document.getElementById("bankdeposit").value);
+display();
+}
+
+//Buy things from the market
+function buy() {
+document.getElementsByClassName("info")[0].innerHTML = "What would you like to buy?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="buygeneralcargo()"> Buy General Cargo</button><br> <button onclick="buyarms()">Buy Arms</button><br> <button onclick="buysilk()">Buy Silk</button><br><button onclick="buyblackmarketcargo()"> Buy Black Market Cargo</button><br> <button onclick="display()">Cancel</button>';
+
+}
+
+function buygeneralcargo() {
+document.getElementsByClassName("info")[0].innerHTML = "How much general cargo would you like to buy?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/generalcargoprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+itemvalue = generalcargoprice;
+itemselected = 'General Cargo';
+}
+
+
+
+function buyarms() {
+document.getElementsByClassName("info")[0].innerHTML = "How many arms would you like to buy?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/armsprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+itemvalue = armsprice;
+itemselected = 'Arms';
+}
+
+function buysilk() {
+document.getElementsByClassName("info")[0].innerHTML = "How much silk would you like to buy?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/silkprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+itemvalue = silkprice;
+itemselected = 'Silk';
+}
+
+function buyblackmarketcargo() {
+document.getElementsByClassName("info")[0].innerHTML = "How much black market cargo would you like to buy?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/blackmarketcargoprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+itemvalue = blackmarketcargoprice;
+itemselected = 'Black Market Cargo';
+}
+
+function subtractmoney() {
+cash = parseInt(cash - document.getElementById("quantity").value * itemvalue);
+switch(itemselected) {
+case 'General Cargo':
+generalcargo = parseInt(generalcargo + document.getElementById("quantity").value);
+break;
+case 'Arms':
+arms = parseInt(arms + document.getElementById("quantity").value);
+break;
+case 'Silk':
+silk = parseInt(silk + document.getElementById("quantity").value);
+break;
+case 'Black Market Cargo':
+blackmarketcargo = parseInt(blackmarketcargo + document.getElementById("quantity").value);
+}
+document.getElementsByClassName("info")[0].innerHTML = document.getElementById("quantity").value + " of " + itemselected + " for a total cost of " + document.getElementById("quantity").value * itemvalue;
+itemselected = null;
+display();
+}
+
+//Sell from inventory
+function sell() {
+document.getElementsByClassName("info")[0].innerHTML = "What would you like to sell?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="sellgeneralcargo()"> Sell General Cargo</button><br> <button onclick="sellarms()">Sell Arms</button><br> <button onclick="sellsilk()">Sell Silk</button><br><button onclick="sellblackmarketcargo()"> Sell General Black Market Cargo</button><br> <button onclick="display()">Cancel</button>';
+}
+
+function sellgeneralcargo() {
+document.getElementsByClassName("info")[0].innerHTML = "How much general cargo would you like to sell?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + generalcargo + '<br><button onclick="addmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+itemvalue = generalcargoprice;
+itemselected = 'General Cargo';
+}
+
+function sellarms() {
+document.getElementsByClassName("info")[0].innerHTML = "How many arms would you like to sell?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + arms + '<br><button onclick="addmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+itemvalue = armsprice;
+itemselected = 'Arms';
+}
+
+function sellsilk() {
+document.getElementsByClassName("info")[0].innerHTML = "How much silk would you like to sell?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + silk + '<br><button onclick="addmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+itemvalue = silkprice;
+itemselected = 'Silk';
+}
+
+function sellblackmarketcargo() {
+document.getElementsByClassName("info")[0].innerHTML = "How much black market cargo would you like to sell?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + blackmarketcargo + '<br><button onclick="addmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+itemvalue = blackmarketcargoprice;
+itemselected = 'Black Market Cargo';
+}
+
+function addmoney() {
+cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
+switch(itemselected) {
+case 'General Cargo':
+generalcargo = parseInt(generalcargo - document.getElementById("quantity").value);
+break;
+case 'Arms':
+arms = parseInt(arms - document.getElementById("quantity").value);
+break;
+case 'Silk':
+silk = parseInt(silk - document.getElementById("quantity").value);
+break;
+case 'Black Market Cargo':
+blackmarketcargo = parseInt(blackmarketcargo - document.getElementById("quantity").value);
+}
+itemselected = null;
+display();
+}
+
+//Leave the port to buy and sell elsewhere
+function leaveport() {
+document.getElementsByClassName("info")[0].innerHTML = "Where would you like to go?";
+//The switch here is so you can not travel to the same place as your current location.
+switch(currentlocation) {
+case "Beijing":
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotomanilla()"> Go To Manilla</button><br> <button onclick="gotopiratecove()"> Go To Pirate Cove</button><br> <button onclick="gotohongkong()">Go To Hong Kong</button><br><button onclick="display()">Cancel</button>';
+break;
+case "Hong Kong":
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotomanilla()"> Go To Manilla</button><br> <button onclick="gotobeijing()">Go To Beijing</button><br> <button onclick="gotopiratecove()">Go To Pirate Cove</button><br><button onclick="display()">Cancel</button>';
+break;
+case "Manilla":
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotopiratecove()"> Go To Pirate Cove</button><br><button onclick="gotobeijing()"> Go To Beijing</button><br> <button onclick="gotohongkong()">Go To Hong Kong</button><br><button onclick="display()">Cancel</button>';
+break;
+case "Pirate Cove":
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotomanilla()"> Go To Manilla</button><br> <button onclick="gotobeijing()">Go To Beijing</button><br> <button onclick="gotohongkong()">Go To Hong Kong</button><br><button onclick="display()">Cancel</button>';
+break;
+}
+}
+
+//move the boat to the new location
+function gotopiratecove() {
+currentlocation = 'Pirate Cove';
+display();
+}
+
+function gotomanilla() {
+currentlocation = 'Manilla';
+display();
+}
+
+function gotobeijing() {
+currentlocation = 'Beijing';
+display();
+}
+
+function gotohongkong() {
+currentlocation = 'Hong Kong';
+display();
+}
+//Moving the boat, calculate the time, 
 
 </script>
 
