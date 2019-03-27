@@ -20,21 +20,23 @@ border: dashed 2px;
 <p>Select an option to begin!</p>
 </div>
 <div class="buttons">
-Please enter select an option:
 <button onclick="newgame()">New Game</button>
 <button onclick="loadgame()">Load Game</button>
+<button onclick="localStorage.clear();">Clear Saved Game</button>
 <button onclick="aboutgame()">About Game</button>
 </div>
 </div>
 <script>
 //Here are the global variables that the game manipulates
-var date;
+var currentdate;
 var name;
 var currentlocation;
-var debt;
-var cash;
-var bank;
+var debt = 0;
+var cash = 0;
+var bank = 0;
 var shipsize;
+//Need to intialize this first, so that it appears as a number
+var currentweight = 0;
 var shipcondition;
 var cannons;
 var generalcargo;
@@ -42,6 +44,7 @@ var arms;
 var silk;
 var blackmarketcargo;
 var mute;
+//These are the starting\test values. This is subject to change
 var generalcargoprice = 5;
 var armsprice = 30;
 var silkprice = 500;
@@ -51,9 +54,9 @@ var itemselected;
 
 //here are the functions from the first page
 function newgame() {
-date = new Date('January 1745');
+name = prompt("Enter Your Company Name", "7 Seas");
+currentdate = new Date(1832, 0);
 currentlocation = 'Beijing';
-console.log(date);
 shipsize = 100;
 shipcondition = 100;
 cannons = 5;
@@ -68,12 +71,14 @@ document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="star
 
 
 function loadgame() {
-if (localStorage.getItem("name") === null) {
-document.getElementsByClassName("info").innerHTML = ('No saved game found!<br>Please select a different option');
+if (localStorage.getItem("name") === null && localStorage.getItem("currentlocation") === null) {
+document.getElementsByClassName("info")[0].innerHTML = ('No saved game found!<br>Please select a different option');
 }
 else {
 name = localStorage.getItem("name");
-date = localStorage.getItem("date");
+currentdate = new Date(localStorage.getItem("currentdate"));
+//not sure why Javascript doesnt keep the months correctly, but this line is to set the date to the right month, else it is behind 1 month.
+currentdate.setMonth(currentdate.getMonth() + 1);
 currentlocation = localStorage.getItem("currentlocation");
 debt = localStorage.getItem("debt");
 cash = localStorage.getItem("cash");
@@ -90,7 +95,8 @@ display();
 }
 
 function aboutgame() {
-document.getElementsByClassName("info")[0].innerHTML = "Taipan was orginally released in 1982 for the TRS80 and Apple 2. <br><button onclick='returnmain()'>Return to main game</button>";
+document.getElementsByClassName("info")[0].innerHTML = "Taipan was orginally released in 1982 for the TRS80 and Apple 2.";
+document.getElementsByClassName("buttons")[0].innerHTML = "<button onclick='returnmain()'>Return to main game</button>"
 }
 
 //Starting with or without debt
@@ -109,7 +115,7 @@ display();
 //Here are the options for each city view
 function savegame() {
 localStorage.setItem("name", name);
-localStorage.setItem("date", date);
+localStorage.setItem("currentdate", currentdate);
 localStorage.setItem("currentlocation", currentlocation);
 localStorage.setItem("debt", debt);
 localStorage.setItem("cash", cash);
@@ -124,15 +130,31 @@ localStorage.setItem("blackmarketcargo", blackmarketcargo);
 }
 
 function returnmain() {
-document.getElementsByClassName("info")[0].innerHTML = "<h1>Taipan</h1><p>Click an option to begin!</p>"
+document.getElementsByClassName("info")[0].innerHTML = "<h1>Taipan</h1><p>Select an option to begin!</p>";
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="newgame()">New Game</button> <button onclick="loadgame()">Load Game</button> <button onclick="localStorage.clear();">Clear Saved Game</button> <button onclick="aboutgame()">About Game</button>';
 }
 
-//This refreshes the main display for the game, which allows you to buy, sell or bank goods.
+//This refreshes the main display for the game, which allows you to buy, sell or visit bank.
 function display() {
-document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
+calculateweight();
+
+if (currentlocation != 'Beijing') {
+document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Date: " + currentdate.toLocaleString('en-us', { year: 'numeric', month: 'long' })  + "<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>Ship Capacity: " + shipsize + "<br>Cannons: " + cannons + '<br>Current Inventory: <span id="load">' + currentweight + "</span><br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
 document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="buy()"> Buy Goods</button><br> <button onclick="sell()">Sell Goods</button><br> <button onclick="visitbank()">Visit The Bank</button><br> <button onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button>';
 }
+else {
+document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Date: " + currentdate.toLocaleString('en-us', { year: 'numeric', month: 'long' }) + "<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>Ship Capacity: " + shipsize + "<br>Cannons: " + cannons + '<br>Current Inventory: <span id="load">' + currentweight + "</span><br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="buy()"> Buy Goods</button><br> <button onclick="sell()">Sell Goods</button><br> <button onclick="visitbank()">Visit The Bank</button><br> <button onclick="visitmoneylender()"> Visit Moneylender</button><br> <button onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button>';
 
+}
+//This changes the load to be colored red if the ship is overloaded
+if (currentweight > shipsize) {
+document.getElementById("load").style.backgroundColor = "red";
+document.getElementById("load").innerHTML += " - Your Ship is Overloaded!"
+}
+}
+
+//this is the deposit screen
 function visitbank() {
 document.getElementsByClassName("info")[0].innerHTML = "Welcome to the bank!<br> How much would you like to deposit?"
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="bankdeposit"> Max ' + cash + '<br><button onclick="depositcash()">Confirm</button> <button onclick="display()">Cancel</button>';
@@ -140,11 +162,57 @@ document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" 
 }
 
 function depositcash() {
-bank = parseInt(document.getElementById("bankdeposit").value);
-cash = cash - parseInt(document.getElementById("bankdeposit").value);
+bank = parseInt(bank) + parseInt(document.getElementById("bankdeposit").value);
+cash = parseInt(cash) - parseInt(document.getElementById("bankdeposit").value);
+visitbank2();
+}
+
+//This is the display screen for withdraws
+function visitbank2() {
+document.getElementsByClassName("info")[0].innerHTML = "Welcome to the bank!<br> How much would you like to withdraw?"
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="bankwithdraw"> Max ' + bank + '<br><button onclick="withdrawcash()">Confirm</button> <button onclick="display()">Cancel</button>';
+
+}
+
+function withdrawcash() {
+if (document.getElementById("bankwithdraw").value !== '') {
+bank = parseInt(bank) - parseInt(document.getElementById("bankwithdraw").value);
+cash = parseInt(cash) + parseInt(document.getElementById("bankwithdraw").value);
+}
 display();
 }
 
+//Get a loan or pay off a loan
+function visitmoneylender() {
+document.getElementsByClassName("info")[0].innerHTML = "Welcome to the money lender. You owe " + debt;
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="getloanamount()">Get a Loan</button><br><button onclick="getpayloanamount()">Pay Off Loan</button>';
+}
+
+function getloanamount() {
+document.getElementsByClassName("info")[0].innerHTML = 'Welcome to the money lender. You owe ' + debt + '<br>The amount grows by 3% per month. How much would you like to borrow?';
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="loanamount"><br><button onclick="getloan()">Get Loan</button><button onclick="display()">Cancel</button>';
+document.getElementById("loanamount").focus();
+}
+
+function getloan() {
+debt = parseInt(debt) + parseInt(document.getElementById("loanamount").value);
+cash = parseInt(cash) + parseInt(document.getElementById("loanamount").value)
+display();
+}
+
+
+function getpayloanamount() {
+document.getElementsByClassName("info")[0].innerHTML = 'Welcome to the money lender. You owe ' + debt + '<br>How much would you like to pay off?';
+document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="repayloanamount"><br><button onclick="payloan()">Pay Loan</button><button onclick="display()">Cancel</button>';
+document.getElementById("repayloanamount").focus();
+}
+
+function payloan() {
+debt = parseInt(debt) - parseInt(document.getElementById("repayloanamount").value);
+cash = parseInt(cash) - parseInt(document.getElementById("repayloanamount").value)
+display();
+}
+ 
 //Buy things from the market
 function buy() {
 document.getElementsByClassName("info")[0].innerHTML = "What would you like to buy?";
@@ -155,6 +223,7 @@ document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="buyg
 function buygeneralcargo() {
 document.getElementsByClassName("info")[0].innerHTML = "How much general cargo would you like to buy?";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/generalcargoprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+document.getElementById("quantity").focus();
 itemvalue = generalcargoprice;
 itemselected = 'General Cargo';
 }
@@ -164,6 +233,7 @@ itemselected = 'General Cargo';
 function buyarms() {
 document.getElementsByClassName("info")[0].innerHTML = "How many arms would you like to buy?";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/armsprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+document.getElementById("quantity").focus();
 itemvalue = armsprice;
 itemselected = 'Arms';
 }
@@ -171,6 +241,7 @@ itemselected = 'Arms';
 function buysilk() {
 document.getElementsByClassName("info")[0].innerHTML = "How much silk would you like to buy?";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/silkprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+document.getElementById("quantity").focus();
 itemvalue = silkprice;
 itemselected = 'Silk';
 }
@@ -178,6 +249,7 @@ itemselected = 'Silk';
 function buyblackmarketcargo() {
 document.getElementsByClassName("info")[0].innerHTML = "How much black market cargo would you like to buy?";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/blackmarketcargoprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+document.getElementById("quantity").focus();
 itemvalue = blackmarketcargoprice;
 itemselected = 'Black Market Cargo';
 }
@@ -211,6 +283,7 @@ document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="sell
 function sellgeneralcargo() {
 document.getElementsByClassName("info")[0].innerHTML = "How much general cargo would you like to sell?";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + generalcargo + '<br><button onclick="addmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+document.getElementById("quantity").focus();
 itemvalue = generalcargoprice;
 itemselected = 'General Cargo';
 }
@@ -218,6 +291,7 @@ itemselected = 'General Cargo';
 function sellarms() {
 document.getElementsByClassName("info")[0].innerHTML = "How many arms would you like to sell?";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + arms + '<br><button onclick="addmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+document.getElementById("quantity").focus();
 itemvalue = armsprice;
 itemselected = 'Arms';
 }
@@ -225,6 +299,7 @@ itemselected = 'Arms';
 function sellsilk() {
 document.getElementsByClassName("info")[0].innerHTML = "How much silk would you like to sell?";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + silk + '<br><button onclick="addmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+document.getElementById("quantity").focus();
 itemvalue = silkprice;
 itemselected = 'Silk';
 }
@@ -232,71 +307,117 @@ itemselected = 'Silk';
 function sellblackmarketcargo() {
 document.getElementsByClassName("info")[0].innerHTML = "How much black market cargo would you like to sell?";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + blackmarketcargo + '<br><button onclick="addmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
+document.getElementById("quantity").focus();
 itemvalue = blackmarketcargoprice;
 itemselected = 'Black Market Cargo';
 }
-
+//----------------------------------------------------------------------------------------------NEEDS WORK
 function addmoney() {
-cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
 switch(itemselected) {
 case 'General Cargo':
+if (generalcargo < document.getElementById("quantity").value) {
+display();
+}
+else {
 generalcargo = parseInt(generalcargo - document.getElementById("quantity").value);
+cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
+}
 break;
 case 'Arms':
+if (arms < document.getElementById("quantity").value) {
+display();
+}
+else {
 arms = parseInt(arms - document.getElementById("quantity").value);
+cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
+}
 break;
 case 'Silk':
+if (silk < document.getElementById("quantity").value) {
+display();
+cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
+}
+else {
 silk = parseInt(silk - document.getElementById("quantity").value);
+cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
+}
 break;
 case 'Black Market Cargo':
+if (blackmarketcargo < document.getElementById("quantity").value) {
+display();
+}
+else {
 blackmarketcargo = parseInt(blackmarketcargo - document.getElementById("quantity").value);
+cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
 }
 itemselected = null;
 display();
 }
+}
 
 //Leave the port to buy and sell elsewhere
 function leaveport() {
+if (shipsize < currentweight) {
+document.getElementsByClassName("info")[0].innerHTML = "Your ship is not large enough! Sell some goods to make room.";
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="display()">Return to Port</button>';
+}
+else {
 document.getElementsByClassName("info")[0].innerHTML = "Where would you like to go?";
-//The switch here is so you can not travel to the same place as your current location.
-switch(currentlocation) {
-case "Beijing":
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotomanilla()"> Go To Manilla</button><br> <button onclick="gotopiratecove()"> Go To Pirate Cove</button><br> <button onclick="gotohongkong()">Go To Hong Kong</button><br><button onclick="display()">Cancel</button>';
-break;
-case "Hong Kong":
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotomanilla()"> Go To Manilla</button><br> <button onclick="gotobeijing()">Go To Beijing</button><br> <button onclick="gotopiratecove()">Go To Pirate Cove</button><br><button onclick="display()">Cancel</button>';
-break;
-case "Manilla":
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotopiratecove()"> Go To Pirate Cove</button><br><button onclick="gotobeijing()"> Go To Beijing</button><br> <button onclick="gotohongkong()">Go To Hong Kong</button><br><button onclick="display()">Cancel</button>';
-break;
-case "Pirate Cove":
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotomanilla()"> Go To Manilla</button><br> <button onclick="gotobeijing()">Go To Beijing</button><br> <button onclick="gotohongkong()">Go To Hong Kong</button><br><button onclick="display()">Cancel</button>';
-break;
+//This checks the value of the buttons and if they match current location, the button will be disabled and colored red.
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotobeijing()" id="Beijing"> Go To Beijing</button><br><button onclick="gotomanilla()" id="Manilla"> Go To Manilla</button><br> <button onclick="gotopiratecove()" id="Pirate Cove"> Go To Pirate Cove</button><br> <button onclick="gotohongkong()" id="Hong Kong">Go To Hong Kong</button><br><button onclick="display()">Cancel</button>';
+document.getElementById(currentlocation).disabled = true;
+document.getElementById(currentlocation).style.backgroundColor = 'red';
+
 }
 }
 
 //move the boat to the new location
 function gotopiratecove() {
 currentlocation = 'Pirate Cove';
+addmonth();
 display();
 }
 
 function gotomanilla() {
 currentlocation = 'Manilla';
+addmonth();
 display();
 }
 
 function gotobeijing() {
 currentlocation = 'Beijing';
+addmonth();
 display();
 }
 
 function gotohongkong() {
 currentlocation = 'Hong Kong';
+addmonth();
 display();
 }
-//Moving the boat, calculate the time, 
 
+//Moving the boat, calculate the time, 
+function addmonth() {
+currentdate.setMonth(currentdate.getMonth() + 1);
+//check for debt, if there is debt, it grows by 3 percent every month
+if (debt !== 0) {
+debt = debt + debt * .03;
+}
+}
+
+//calculates the current weight
+function calculateweight() {
+currentweight = parseInt(cannons) * 10 + parseInt(generalcargo) + parseInt(arms) + parseInt(silk) + parseInt(blackmarketcargo);
+}
+
+//battle
+function battle() {
+var chance;
+var enemyships;
+//This changes the difficulty of the encounter, 1 being the easiest and 20 being the hardest
+var difficulty = math.random(20);
+
+}
 </script>
 
 <footer>
