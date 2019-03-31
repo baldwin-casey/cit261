@@ -27,6 +27,7 @@ border: dashed 2px;
 </div>
 </div>
 <script>
+//A copy of the game can be found here https://github.com/ebassett/taipan/blob/master/taipan.c
 //Here are the global variables that the game manipulates
 var currentdate;
 var name;
@@ -95,7 +96,7 @@ display();
 }
 
 function aboutgame() {
-document.getElementsByClassName("info")[0].innerHTML = "Taipan was orginally released in 1982 for the TRS80 and Apple 2.";
+document.getElementsByClassName("info")[0].innerHTML = "Taipan was originally released in 1982 for the TRS80 and Apple 2.";
 document.getElementsByClassName("buttons")[0].innerHTML = "<button onclick='returnmain()'>Return to main game</button>"
 }
 
@@ -140,17 +141,52 @@ calculateweight();
 
 if (currentlocation != 'Beijing') {
 document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Date: " + currentdate.toLocaleString('en-us', { year: 'numeric', month: 'long' })  + "<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>Ship Capacity: " + shipsize + "<br>Cannons: " + cannons + '<br>Current Inventory: <span id="load">' + currentweight + "</span><br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="buy()"> Buy Goods</button><br> <button onclick="sell()">Sell Goods</button><br> <button onclick="visitbank()">Visit The Bank</button><br> <button onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button>';
+document.getElementsByClassName("buttons")[0].innerHTML = '<button id="buy" onclick="buy()"> Buy Goods</button><br> <button id="sell" onclick="sell()">Sell Goods</button><br> <button id="visitbank" onclick="visitbank()">Visit The Bank</button><br> <button id="leaveport" onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button> <br><button id="retire" onclick="retire()">Retire</button>';
 }
 else {
 document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Date: " + currentdate.toLocaleString('en-us', { year: 'numeric', month: 'long' }) + "<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>Ship Capacity: " + shipsize + "<br>Cannons: " + cannons + '<br>Current Inventory: <span id="load">' + currentweight + "</span><br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="buy()"> Buy Goods</button><br> <button onclick="sell()">Sell Goods</button><br> <button onclick="visitbank()">Visit The Bank</button><br> <button onclick="visitmoneylender()"> Visit Moneylender</button><br> <button onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button>';
+document.getElementsByClassName("buttons")[0].innerHTML = '<button id="buy" onclick="buy()"> Buy Goods</button><br> <button id="sell" onclick="sell()">Sell Goods</button><br> <button id="visitbank" onclick="visitbank()">Visit The Bank</button><br> <button id="visitmoneylender" onclick="visitmoneylender()"> Visit Moneylender</button><br> <button id="leaveport" onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button> <br><button id="retire" onclick="retire()">Retire</button>';
 
 }
 //This changes the load to be colored red if the ship is overloaded
 if (currentweight > shipsize) {
 document.getElementById("load").style.backgroundColor = "red";
 document.getElementById("load").innerHTML += " - Your Ship is Overloaded!"
+document.getElementById("leaveport").style.backgroundColor = "red";
+document.getElementById("leaveport").disabled = true;
+}
+
+//Check if you have money to deposit into bank or money to withdraw. If neither, the bank is kinda pointless
+if (bank == 0 && cash == 0) {
+document.getElementById("visitbank").disabled = true;
+document.getElementById("visitbank").style.backgroundColor = "red";
+}
+
+//If you don't have money, you can't go to places that need money
+if (cash == 0) {
+document.getElementById("visitmoneylender").disabled = true;
+document.getElementById("visitmoneylender").style.backgroundColor = "red";
+document.getElementById("buy").disabled = true;
+document.getElementById("buy").style.backgroundColor = "red";
+}
+
+//If you have no goods, you cant sell anything, so the button is disabled
+if (generalcargo == 0) {
+	if (arms == 0) {
+		if (silk == 0) {
+			if (blackmarketcargo == 0) {
+				document.getElementById("sell").disabled = true;
+				document.getElementById("sell").style.backgroundColor = "red";
+			}
+		}
+	}
+}
+
+var totalworth = parseInt(cash) + parseInt(bank);
+//Check if you have enough money to retire
+if (totalworth < 1000000) {
+document.getElementById("retire").style.backgroundColor = "red";
+document.getElementById("retire").disabled = true;
 }
 }
 
@@ -185,7 +221,11 @@ display();
 //Get a loan or pay off a loan
 function visitmoneylender() {
 document.getElementsByClassName("info")[0].innerHTML = "Welcome to the money lender. You owe " + debt;
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="getloanamount()">Get a Loan</button><br><button onclick="getpayloanamount()">Pay Off Loan</button>';
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="getloanamount()">Get a Loan</button><br><button id="payoffloan" onclick="getpayloanamount()">Pay Off Loan</button><br><button onclick="display()">Cancel</button>';
+if (debt === 0) {
+document.getElementById("payoffloan").disabled = true;
+document.getElementById("payoffloan").style.backgroundColor = "red";
+}
 }
 
 function getloanamount() {
@@ -215,8 +255,26 @@ display();
  
 //Buy things from the market
 function buy() {
-document.getElementsByClassName("info")[0].innerHTML = "What would you like to buy?";
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="buygeneralcargo()"> Buy General Cargo</button><br> <button onclick="buyarms()">Buy Arms</button><br> <button onclick="buysilk()">Buy Silk</button><br><button onclick="buyblackmarketcargo()"> Buy Black Market Cargo</button><br> <button onclick="display()">Cancel</button>';
+document.getElementsByClassName("info")[0].innerHTML = "What would you like to buy?<br>General Cargo: " + generalcargoprice + "<br>Arms: " + armsprice + "<br>Silk: " + silkprice + "<br>Black Market Cargo: " + blackmarketcargoprice + "<br><br>You have: " + cash;
+document.getElementsByClassName("buttons")[0].innerHTML = '<button id="buygeneralcargo" onclick="buygeneralcargo()"> Buy General Cargo</button><br> <button id="buyarms" onclick="buyarms()">Buy Arms</button><br> <button id="buysilk" onclick="buysilk()">Buy Silk</button><br><button id="buyblackmarketcargo" onclick="buyblackmarketcargo()"> Buy Black Market Cargo</button><br> <button onclick="display()">Cancel</button>';
+//If not enough money for a certain good, button will be disabled
+if (cash < generalcargoprice) {
+document.getElementById("buygeneralcargo").disabled = true;
+document.getElementById("buygeneralcargo").style.backgroundColor = "red";
+}
+if (cash < armsprice) {
+document.getElementById("buyarms").disabled = true;
+document.getElementById("buyarms").style.backgroundColor = "red";
+}
+
+if (cash < silkprice) {
+document.getElementById("buysilk").disabled = true;
+document.getElementById("buysilk").style.backgroundColor = "red";
+}
+if (cash < blackmarketcargoprice) {
+document.getElementById("buyblackmarketcargo").disabled = true;
+document.getElementById("buyblackmarketcargo").style.backgroundColor = "red";
+}
 
 }
 
@@ -231,7 +289,7 @@ itemselected = 'General Cargo';
 
 
 function buyarms() {
-document.getElementsByClassName("info")[0].innerHTML = "How many arms would you like to buy?";
+document.getElementsByClassName("info")[0].innerHTML = "How many arms would you like to buy?<br>Cost:" + armsprice;
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/armsprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
 document.getElementById("quantity").focus();
 itemvalue = armsprice;
@@ -239,7 +297,7 @@ itemselected = 'Arms';
 }
 
 function buysilk() {
-document.getElementsByClassName("info")[0].innerHTML = "How much silk would you like to buy?";
+document.getElementsByClassName("info")[0].innerHTML = "How much silk would you like to buy?4";
 document.getElementsByClassName("buttons")[0].innerHTML = '<input type="number" id="quantity"> Max ' + parseInt(cash/silkprice) + '<br><button onclick="subtractmoney()">Confirm</button> <button onclick="display()">Cancel</button>';
 document.getElementById("quantity").focus();
 itemvalue = silkprice;
@@ -254,11 +312,20 @@ itemvalue = blackmarketcargoprice;
 itemselected = 'Black Market Cargo';
 }
 
+//------------------------------------------------------------------------FIX THIS
 function subtractmoney() {
+
 cash = parseInt(cash - document.getElementById("quantity").value * itemvalue);
+
 switch(itemselected) {
 case 'General Cargo':
-generalcargo = parseInt(generalcargo + document.getElementById("quantity").value);
+if (document.getElementById("quantity").value * itemvalue > cash) {
+generalcargo = generalcargo + parseInt(cash/generalcargoprice);
+cash = parseInt(cash - generalcargo * itemvalue);
+}
+else {
+cash = parseInt(document.getElementById("quantity").value * itemvalue);
+}
 break;
 case 'Arms':
 arms = parseInt(arms + document.getElementById("quantity").value);
@@ -277,7 +344,27 @@ display();
 //Sell from inventory
 function sell() {
 document.getElementsByClassName("info")[0].innerHTML = "What would you like to sell?";
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="sellgeneralcargo()"> Sell General Cargo</button><br> <button onclick="sellarms()">Sell Arms</button><br> <button onclick="sellsilk()">Sell Silk</button><br><button onclick="sellblackmarketcargo()"> Sell General Black Market Cargo</button><br> <button onclick="display()">Cancel</button>';
+document.getElementsByClassName("buttons")[0].innerHTML = '<button id="sellgeneralcargo" onclick="sellgeneralcargo()"> Sell General Cargo</button><br> <button id="sellarms" onclick="sellarms()">Sell Arms</button><br> <button id="sellsilk" onclick="sellsilk()">Sell Silk</button><br><button id="sellblackmarketcargo" onclick="sellblackmarketcargo()"> Sell General Black Market Cargo</button><br> <button onclick="display()">Cancel</button>';
+//Check for number of items, if player does not have certain good, the button is disabled
+if (generalcargo == 0) {
+document.getElementById("sellgeneralcargo").disabled = true;
+document.getElementById("sellgeneralcargo").style.backgroundColor = "red";
+}
+
+if (arms == 0 || arms === '') {
+document.getElementById("sellarms").disabled = true;
+document.getElementById("sellarms").style.backgroundColor = "red";
+}
+
+if (silk == 0) {
+document.getElementById("sellsilk").disabled = true;
+document.getElementById("sellsilk").style.backgroundColor = "red";
+}
+
+if (blackmarketcargo == 0) {
+document.getElementById("sellblackmarketcargo").disabled = true;
+document.getElementById("sellblackmarketcargo").style.backgroundColor = "red";
+}
 }
 
 function sellgeneralcargo() {
@@ -357,11 +444,6 @@ display();
 
 //Leave the port to buy and sell elsewhere
 function leaveport() {
-if (shipsize < currentweight) {
-document.getElementsByClassName("info")[0].innerHTML = "Your ship is not large enough! Sell some goods to make room.";
-document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="display()">Return to Port</button>';
-}
-else {
 document.getElementsByClassName("info")[0].innerHTML = "Where would you like to go?";
 //This checks the value of the buttons and if they match current location, the button will be disabled and colored red.
 document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="gotobeijing()" id="Beijing"> Go To Beijing</button><br><button onclick="gotomanilla()" id="Manilla"> Go To Manilla</button><br> <button onclick="gotopiratecove()" id="Pirate Cove"> Go To Pirate Cove</button><br> <button onclick="gotohongkong()" id="Hong Kong">Go To Hong Kong</button><br><button onclick="display()">Cancel</button>';
@@ -369,7 +451,7 @@ document.getElementById(currentlocation).disabled = true;
 document.getElementById(currentlocation).style.backgroundColor = 'red';
 
 }
-}
+
 
 //move the boat to the new location
 function gotopiratecove() {
@@ -401,8 +483,10 @@ function addmonth() {
 currentdate.setMonth(currentdate.getMonth() + 1);
 //check for debt, if there is debt, it grows by 3 percent every month
 if (debt !== 0) {
-debt = debt + debt * .03;
+//debt plus (debt multiplied by interest rate)
+debt = parseInt(debt + debt * .03);
 }
+
 }
 
 //calculates the current weight
@@ -417,6 +501,19 @@ var enemyships;
 //This changes the difficulty of the encounter, 1 being the easiest and 20 being the hardest
 var difficulty = math.random(20);
 
+}
+
+//This calculates the prices, some ports pay more for items while others less. Also different months of the year change what is in demand
+function caluclateprices() {
+console.log(currentdate.getMonth());
+
+}
+
+//This is the end of the game where stats are shown
+function retire() {
+var totalworth = parseInt(cash) + parseInt(bank);
+document.getElementsByClassName("info")[0].innerHTML = "<h1>You are a millionaire!</h1><p>Your total worth was <b>" + totalworth + "</b>";
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="location.reload()">Play Again</button>';
 }
 </script>
 
