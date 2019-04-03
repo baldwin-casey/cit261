@@ -11,6 +11,44 @@ div.buttons {
 padding: 8px;
 border: dashed 2px;
 }
+
+/*Copied from W3 schools to save time. Just a simple shake when the ship is hit. */
+@keyframes cannonhit {
+0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@-webkit-keyframes cannonhit {
+0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+
+@keyframes shipsunk {
+
+}
+
+@-webkit-keyframes shipsunk {
+
+}
 </style>
 </head>
 <body>
@@ -28,6 +66,8 @@ border: dashed 2px;
 </div>
 <script>
 //A copy of the game can be found here https://github.com/ebassett/taipan/blob/master/taipan.c
+//I did not copy the code from the link above, I used some of the math so the game would be functional, everything is my original code, as C code != javascript.
+//A full playable version of the game can be found here http://www.taipangame.com/
 //Here are the global variables that the game manipulates
 var currentdate;
 var name;
@@ -52,6 +92,15 @@ var silkprice = 500;
 var blackmarketcargoprice = 6000;
 var itemvalue;
 var itemselected;
+//This is for the battle portion of the game
+var enemyship1health = 3;
+var enemyship2health = 3;
+var enemyship3health = 3;
+var enemyship4health = 3;
+var enemyship5health = 3;
+var enemyship6health = 3;
+var enemyships = 6;
+var startbattle = 0;
 
 //here are the functions from the first page
 function newgame() {
@@ -140,11 +189,11 @@ function display() {
 calculateweight();
 
 if (currentlocation != 'Beijing') {
-document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Date: " + currentdate.toLocaleString('en-us', { year: 'numeric', month: 'long' })  + "<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>Ship Capacity: " + shipsize + "<br>Cannons: " + cannons + '<br>Current Inventory: <span id="load">' + currentweight + "</span><br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
+document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Date: " + currentdate.toLocaleString('en-us', { year: 'numeric', month: 'long' })  + "<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>Ship Capacity: " + shipsize + "<br>Cannons: " + cannons + '<br>Current Weight: <span id="load">' + currentweight + "</span><br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
 document.getElementsByClassName("buttons")[0].innerHTML = '<button id="buy" onclick="buy()"> Buy Goods</button><br> <button id="sell" onclick="sell()">Sell Goods</button><br> <button id="visitbank" onclick="visitbank()">Visit The Bank</button><br> <button id="leaveport" onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button> <br><button id="retire" onclick="retire()">Retire</button>';
 }
 else {
-document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Date: " + currentdate.toLocaleString('en-us', { year: 'numeric', month: 'long' }) + "<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>Ship Capacity: " + shipsize + "<br>Cannons: " + cannons + '<br>Current Inventory: <span id="load">' + currentweight + "</span><br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
+document.getElementsByClassName("info")[0].innerHTML = "Welcome to " + currentlocation + "!<br>Date: " + currentdate.toLocaleString('en-us', { year: 'numeric', month: 'long' }) + "<br>Cash: " + cash + "<br>Bank: " + bank + "<br>Debt: " + debt + "<br>Ship Condition: " +  shipcondition + "%" + "<br>Ship Capacity: " + shipsize + "<br>Cannons: " + cannons + '<br>Current Weight: <span id="load">' + currentweight + "</span><br>General Cargo: " + generalcargo + "<br>Arms: " + arms + "<br>Silk: " + silk + "<br>Black Market Cargo: " + blackmarketcargo;
 document.getElementsByClassName("buttons")[0].innerHTML = '<button id="buy" onclick="buy()"> Buy Goods</button><br> <button id="sell" onclick="sell()">Sell Goods</button><br> <button id="visitbank" onclick="visitbank()">Visit The Bank</button><br> <button id="visitmoneylender" onclick="visitmoneylender()"> Visit Moneylender</button><br> <button id="leaveport" onclick="leaveport()">Leave The Port</button><br> <button onclick="savegame()">Save Game</button> <br><button id="retire" onclick="retire()">Retire</button>';
 
 }
@@ -312,19 +361,17 @@ itemvalue = blackmarketcargoprice;
 itemselected = 'Black Market Cargo';
 }
 
-//------------------------------------------------------------------------FIX THIS
+//------------------------------------------------------------------------FIX THIS -- GENERAL CARGO IS FIXED
 function subtractmoney() {
-
-cash = parseInt(cash - document.getElementById("quantity").value * itemvalue);
-
 switch(itemselected) {
 case 'General Cargo':
+//If the value of goods is more than the player has...
 if (document.getElementById("quantity").value * itemvalue > cash) {
-generalcargo = generalcargo + parseInt(cash/generalcargoprice);
-cash = parseInt(cash - generalcargo * itemvalue);
+document.getElementsByClassName("info")[0].innerHTML += "You do not have enough money!";
 }
 else {
-cash = parseInt(document.getElementById("quantity").value * itemvalue);
+cash = cash - parseInt(document.getElementById("quantity").value * itemvalue);
+generalcargo = parseInt(generalcargo) + parseInt(generalcargo) + parseInt(document.getElementById("quantity").value);
 }
 break;
 case 'Arms':
@@ -407,7 +454,7 @@ display();
 }
 else {
 generalcargo = parseInt(generalcargo - document.getElementById("quantity").value);
-cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
+cash = parseInt(cash) + parseInt(document.getElementById("quantity").value) * parseInt(itemvalue);
 }
 break;
 case 'Arms':
@@ -437,9 +484,9 @@ else {
 blackmarketcargo = parseInt(blackmarketcargo - document.getElementById("quantity").value);
 cash = parseInt(cash + document.getElementById("quantity").value * itemvalue);
 }
+}
 itemselected = null;
 display();
-}
 }
 
 //Leave the port to buy and sell elsewhere
@@ -462,8 +509,9 @@ display();
 
 function gotomanilla() {
 currentlocation = 'Manilla';
-addmonth();
-display();
+battle();
+//addmonth();
+//display();
 }
 
 function gotobeijing() {
@@ -496,11 +544,323 @@ currentweight = parseInt(cannons) * 10 + parseInt(generalcargo) + parseInt(arms)
 
 //battle
 function battle() {
-var chance;
-var enemyships;
+var chance = 1;
+//this line is for counting the onscreen ships. 
+if (startbattle == 0) {
 //This changes the difficulty of the encounter, 1 being the easiest and 20 being the hardest
-var difficulty = math.random(20);
+var difficulty = Math.floor(Math.random() * 20) + 1;
+var currentvalue = cash + bank;
+var progressmultiplier = currentvalue / 100000;
+enemyship1health = 3;
+enemyship2health = 3;
+enemyship3health = 3;
+enemyship4health = 3;
+enemyship5health = 3;
+enemyship6health = 3;
+if (progressmultiplier < 1) {
+progressmultiplier = 1;
+}
+enemyships = parseInt(progressmultiplier * difficulty);
+if (enemyships < 6) {
+enemyships = 6;
+}
+enemyships = enemyships - 6;
+startbattle = 1;
+}
+//display for battle
+document.getElementsByClassName("info")[0].innerHTML = 'Your health: ' + shipcondition + ' Their condition: ' + enemyship1health + ' ' + enemyship2health + ' ' + enemyship3health + ' ' + enemyship4health + ' ' + enemyship5health + ' ' + enemyship6health + ' Num of Ships: ' + enemyships + '<br><div id="container"><div id="ocean"><div id="playership"><img src="ship.jpg"/></div></div></div>';
+document.getElementsByClassName("buttons")[0].innerHTML = '<button id="fight" onclick="fight()">Fight</button><button onclick="run()">Run</button>';
 
+//If you don't have cannons, you cant fire on the enemy
+if (cannons === 0) {
+document.getElementById("fight").style.backgroundColor = "red";
+document.getElementById("fight").disabled = true;
+}
+
+//Check to see if you won
+if (enemyships == 0 && enemyship1health == 0 && enemyship2health == 0 && enemyship3health == 0 && enemyship4health == 0 && enemyship5health == 0 && enemyship6health == 0) {
+//reset this back to 0
+startbattle = 0;
+addmonth();
+setTimeout(victoryscreen(), 5000);
+display();
+}
+}
+
+//function for firing on the enemy
+function fight() {
+var x = 0;
+while (x < cannons) {
+var hitship = Math.floor(Math.random() * 6) + 1;
+switch(hitship) {
+case 1:
+//Why this assault of ifs? just in case the random picks a sunk ship. It goes through every ship and if every ship has health of 0 than victory
+if (enemyship1health == 0){
+	if (enemyship2health == 0){
+		if (enemyship3health == 0) {
+			if (enemyship4health == 0) {
+				if (enemyship5health == 0) {
+					if (enemyship6health == 0) {
+						victoryscreen();
+						}
+					else {
+					enemyship6health = enemyship6health - 1;
+					}
+					}
+				else {
+				enemyship5health = enemyship5health - 1;
+				}
+				}
+			else {
+			enemyship4health = enemyship4health - 1;
+			}
+			}
+		else {
+		enemyship3health = enemyship3health - 1;
+		}
+		}
+	else {
+	enemyship2health = enemyship2health - 1;
+	}
+}
+
+
+else {
+enemyship1health = enemyship1health - 1;
+}
+break;
+case 2:
+if (enemyship2health == 0){
+	if (enemyship1health == 0){
+		if (enemyship3health == 0) {
+			if (enemyship4health == 0) {
+				if (enemyship5health == 0) {
+					if (enemyship6health == 0) {
+						victoryscreen();
+						}
+					else {
+					enemyship6health = enemyship6health - 1;
+					}
+					}
+				else {
+				enemyship5health = enemyship5health - 1;
+				}
+				}
+			else {
+			enemyship4health = enemyship4health - 1;
+			}
+			}
+		else {
+		enemyship3health = enemyship3health - 1;
+		}
+		}
+	else {
+	enemyship1health = enemyship1health - 1;
+	}
+}
+else {
+enemyship2health = enemyship2health - 1;
+}
+break;
+case 3:
+if (enemyship3health == 0){
+	if (enemyship2health == 0){
+		if (enemyship1health == 0) {
+			if (enemyship4health == 0) {
+				if (enemyship5health == 0) {
+					if (enemyship6health == 0) {
+						victoryscreen();
+						}
+					else {
+					enemyship6health = enemyship6health - 1;
+					}
+					}
+				else {
+				enemyship5health = enemyship5health - 1;
+				}
+				}
+			else {
+			enemyship4health = enemyship4health - 1;
+			}
+			}
+		else {
+		enemyship1health = enemyship1health - 1;
+		}
+		}
+	else {
+	enemyship2health = enemyship2health - 1;
+	}
+}
+else {
+enemyship3health = enemyship3health - 1;
+}
+break;
+case 4:
+if (enemyship4health == 0){
+	if (enemyship2health == 0){
+		if (enemyship3health == 0) {
+			if (enemyship1health == 0) {
+				if (enemyship5health == 0) {
+					if (enemyship6health == 0) {
+						victoryscreen();
+						}
+					else {
+					enemyship6health = enemyship6health - 1;
+					}
+					}
+				else {
+				enemyship5health = enemyship5health - 1;
+				}
+				}
+			else {
+			enemyship1health = enemyship1health - 1;
+			}
+			}
+		else {
+		enemyship3health = enemyship3health - 1;
+		}
+		}
+	else {
+	enemyship2health = enemyship2health - 1;
+	}
+}
+else {
+enemyship4health = enemyship4health - 1;
+}
+break;
+case 5:
+if (enemyship5health == 0){
+	if (enemyship2health == 0){
+		if (enemyship3health == 0) {
+			if (enemyship4health == 0) {
+				if (enemyship1health == 0) {
+					if (enemyship6health == 0) {
+						victoryscreen();
+						}
+					else {
+					enemyship6health = enemyship6health - 1;
+					}
+					}
+				else {
+				enemyship1health = enemyship1health - 1;
+				}
+				}
+			else {
+			enemyship4health = enemyship4health - 1;
+			}
+			}
+		else {
+		enemyship3health = enemyship3health - 1;
+		}
+		}
+	else {
+	enemyship2health = enemyship2health - 1;
+	}
+}
+else {
+enemyship5health = enemyship5health - 1;
+}
+break;
+case 6:
+if (enemyship6health == 0){
+	if (enemyship2health == 0){
+		if (enemyship3health == 0) {
+			if (enemyship4health == 0) {
+				if (enemyship5health == 0) {
+					if (enemyship1health == 0) {
+						victoryscreen();
+						}
+					else {
+					enemyship1health = enemyship1health - 1;
+					}
+					}
+				else {
+				enemyship5health = enemyship5health - 1;
+				}
+				}
+			else {
+			enemyship4health = enemyship4health - 1;
+			}
+			}
+		else {
+		enemyship3health = enemyship3health - 1;
+		}
+		}
+	else {
+	enemyship2health = enemyship2health - 1;
+	}
+}
+else {
+enemyship6health = enemyship6health - 1;
+}
+}
+
+//what is this abomination of code? It checks if there are more enemy ships to take the place of one that has been sunk.
+if (enemyship1health == 0 && enemyships == 0) {
+	if (enemyships == 0) {
+	null;
+	}
+	else {
+	enemyship1health = 3;
+	enemyships = enemyships - 1;
+	}
+}
+if (enemyship2health == 0) {
+	if (enemyships == 0) {
+	null;
+	}
+	else {
+	enemyship2health = 3;
+	enemyships = enemyships - 1;
+	}
+}
+if (enemyship3health == 0) {
+	if (enemyships == 0) {
+	null;
+	}
+	else {
+	enemyship3health = 3;
+	enemyships = enemyships - 1;
+	}
+}
+if (enemyship4health == 0) {
+	if (enemyships == 0) {
+	null;
+	}
+	else {
+	enemyship4health = 3;
+	enemyships = enemyships - 1;
+	}
+}
+if (enemyship5health == 0) {
+	if (enemyships == 0) {
+	null;
+	}
+	else {
+	enemyship5health = 3;
+	enemyships = enemyships - 1;
+	}
+}
+if (enemyship6health == 0) {
+	if (enemyships == 0) {
+	null;
+	}
+	else {
+	enemyship6health = 3;
+	enemyships = enemyships - 1;
+	}
+}
+x++;
+}
+battle();
+}
+
+//Display for winning a battle, shows the reward
+function victoryscreen() {
+//spoils will change to reflect number of ships sank
+var spoils = 1000;
+document.getElementsByClassName("info")[0].innerHTML = 'You won! You recieved ' + spoils + ' for winning.';
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="display()">Continue</button>';
 }
 
 //This calculates the prices, some ports pay more for items while others less. Also different months of the year change what is in demand
@@ -508,6 +868,33 @@ function caluclateprices() {
 console.log(currentdate.getMonth());
 
 }
+
+function getcannon() {
+var cannoncost;
+var holdspace = shipsize - currentweight;
+if (cash > cannoncost && currentweight > 10) {
+document.getElementsByClassName("info")[0].innerHTML = "Would you like to purchase a cannon for " + cannoncost + "?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="addcannon()">Yes</button> <button onclick="display()">No</button>';
+}
+}
+
+function addcannon() {
+cannon = parseInt(cannon) + 1;
+display();
+}
+
+function fixship() {
+//This shipyard is located in Beijing, so you cant visit it if you are not there and if your ship is not damaged.
+if (shipcondition < 100 && currentlocation == 'Beijing') {
+var repairamount = (100 - shipcondition) * 500;
+document.getElementsByClassName("info")[0].innerHTML = "You ship has been damaged! Would you like to repair the damage for " + repairamount + "?";
+document.getElementsByClassName("buttons")[0].innerHTML = '<button onclick="fixship()">Fix All Damage</button> <button onclick="partialfixship()">Partially Fix the Ship</button><button onclick="display()">Dont Fix the Ships</button>';
+}
+else {
+display();
+}
+}
+
 
 //This is the end of the game where stats are shown
 function retire() {
