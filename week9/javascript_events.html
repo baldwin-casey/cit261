@@ -69,7 +69,7 @@ var cursorlocation = null;
 //start the garlic bread with a space
 var breadlocation = Math.floor(Math.random() * 9) + 1;
 var banneddiv;
-document.getElementById(breadlocation).innerHTML = '<img src="https://cdn.shopify.com/s/files/1/1457/1254/products/Garlic_bread_580x@2x.jpg?v=1476652397"/>';
+document.getElementById(breadlocation).innerHTML = '<img src="garlicbread.jpg"/>';
 //declaration for keyboard
 var x = null;
 //Runs after every box is touched
@@ -125,7 +125,7 @@ breadlocation = Math.floor(Math.random() * 9) + 1;
 
 function displaybread() {
 //NEEDS MORE GARLIC BREAD
-document.getElementById(breadlocation).innerHTML = '<img src="https://cdn.shopify.com/s/files/1/1457/1254/products/Garlic_bread_580x@2x.jpg?v=1476652397"/>';
+document.getElementById(breadlocation).innerHTML = '<img src="garlicbread.jpg"/>';
 //Display info about the cursor location and bread location
 document.getElementById("test").innerHTML = 'Your selected box is #<b>' + cursorlocation + '</b> and the garlic bread is in box #<b>' + breadlocation + '</b>';
 }
